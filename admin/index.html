@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Administração de Produtos | Raquiel Fitness &amp; Acessórios</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/png" href="/favicon/acessorios-favicon-32x32.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<!-- ============================================================
+     CONFIGURAÇÃO DO SUPABASE
+     Preencha estes dois valores com os dados do SEU projeto
+     Supabase (Project Settings → API). O "anon public key" é
+     seguro para ficar aqui — veja o guia de instalação (README)
+     para entender por quê.
+============================================================ -->
+<script>
+  window.SUPABASE_URL = "https://jwmjahmrumzhynmvesxi.supabase.co";
+  window.SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp3bWphaG1ydW16aHlubXZlc3hpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAzNzE0NzksImV4cCI6MjEwNTk0NzQ3OX0.-FghIpgPGnrubqVuI7oOYtRof62neQQLYANrOoXLE2w";
+  window.PRODUTOS_BUCKET = "produtos-fotos";
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- ============================================================
+     CSS — mesma identidade visual do site (preto + dourado)
+============================================================ -->
+<style>
+:root{
+  --black:        #0A0A0A;
+  --black-soft:   #141414;
+  --black-card:   #171614;
+  --gold:         #C8A15A;
+  --gold-light:   #E6CC93;
+  --gold-dim:     rgba(200,161,90,0.35);
+  --white:        #F8F6F1;
+  --white-soft:   rgba(248,246,241,0.75);
+  --white-faint:  rgba(248,246,241,0.48);
+  --line:         rgba(200,161,90,0.16);
+  --danger:       #D9695A;
+  --danger-light: #F2A196;
+  --success:      #7FC49A;
+
+  --font-display: 'Cormorant Garamond', serif;
+  --font-body:    'Manrope', sans-serif;
+  --ease: cubic-bezier(.16,.84,.44,1);
+  --radius-lg: 20px;
+  --radius-md: 14px;
+  --radius-sm: 8px;
+}
+*,*::before,*::after{ box-sizing:border-box; }
+html{ overflow-x:hidden; }
+body{
+  margin:0; background:var(--black); color:var(--white); font-family:var(--font-body);
+  line-height:1.55; -webkit-font-smoothing:antialiased; min-height:100vh;
+}
+h1,h2,h3{ font-family:var(--font-display); font-weight:600; margin:0; color:var(--white); }
+img{ max-width:100%; display:block; }
+button{ font-family:inherit; cursor:pointer; }
+input{ font-family:inherit; }
+::selection{ background:var(--gold); color:var(--black); }
+
+.wrap{ max-width:1100px; margin:0 auto; padding:0 20px; }
+
+/* ---------- topbar ---------- */
+.topbar{
+  position:sticky; top:0; z-index:50;
+  background:rgba(10,10,10,0.92); backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+  padding:16px 0;
+}
+.topbar-inner{ display:flex; align-items:center; justify-content:space-between; gap:16px; }
+.brand{ font-family:var(--font-display); font-size:1.2rem; font-weight:600; }
+.brand small{ display:block; font-family:var(--font-body); font-size:0.7rem; letter-spacing:0.12em; color:var(--gold); text-transform:uppercase; font-weight:700; margin-top:2px; }
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  padding:11px 22px; border-radius:100px; font-weight:700; font-size:0.85rem;
+  border:1px solid transparent; transition:transform .3s var(--ease), border-color .3s, color .3s, background .3s;
+  white-space:nowrap;
+}
+.btn-gold{ background:linear-gradient(135deg,var(--gold-light),var(--gold)); color:#1a1305; }
+.btn-gold:hover{ transform:translateY(-2px); }
+.btn-outline{ background:transparent; border-color:rgba(248,246,241,0.3); color:var(--white); }
+.btn-outline:hover{ border-color:var(--gold); color:var(--gold-light); }
+.btn-danger{ background:transparent; border-color:rgba(217,105,90,0.5); color:var(--danger-light); }
+.btn-danger:hover{ background:var(--danger); border-color:var(--danger); color:#fff; }
+.btn-sm{ padding:8px 16px; font-size:0.78rem; }
+.btn-icon{ padding:8px; width:36px; height:36px; border-radius:50%; }
+.btn:disabled{ opacity:0.5; cursor:not-allowed; transform:none !important; }
+
+/* ---------- login ---------- */
+.login-screen{ min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px; }
+.login-card{
+  width:100%; max-width:380px; background:var(--black-card); border:1px solid var(--line);
+  border-radius:var(--radius-lg); padding:40px 32px; text-align:center;
+}
+.login-card h1{ font-size:1.8rem; margin-bottom:8px; }
+.login-card p{ color:var(--white-faint); font-size:0.88rem; margin-bottom:28px; }
+.field{ text-align:left; margin-bottom:16px; }
+.field label{ display:block; font-size:0.78rem; color:var(--white-soft); margin-bottom:6px; font-weight:600; }
+.field input{
+  width:100%; padding:12px 14px; border-radius:var(--radius-sm); border:1px solid var(--line);
+  background:var(--black-soft); color:var(--white); font-size:0.92rem; outline:none;
+  transition:border-color .3s;
+}
+.field input:focus{ border-color:var(--gold-dim); }
+.login-card .btn{ width:100%; margin-top:10px; }
+.login-error{ color:var(--danger-light); font-size:0.82rem; margin-top:14px; min-height:1.2em; }
+
+/* ---------- app ---------- */
+.app{ display:none; }
+.app.visible{ display:block; }
+.section-block{ padding:44px 0; }
+.section-head{ display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:26px; }
+.section-head .eyebrow{ font-size:0.72rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--gold); font-weight:700; margin-bottom:6px; }
+.section-head h2{ font-size:1.7rem; }
+.divider{ height:1px; background:var(--line); margin:0; }
+
+.grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(220px,1fr)); gap:18px; }
+.pcard{
+  background:linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.008));
+  border:1px solid var(--line); border-radius:var(--radius-md); overflow:hidden;
+  transition:border-color .3s, opacity .3s;
+  position:relative;
+}
+.pcard.dragging{ opacity:0.4; }
+.pcard.drag-over{ border-color:var(--gold); }
+.pcard-media{ aspect-ratio:3/4; background:#111; position:relative; }
+.pcard-media img{ width:100%; height:100%; object-fit:cover; }
+.pcard-drag-handle{
+  position:absolute; top:8px; left:8px; width:30px; height:30px; border-radius:50%;
+  background:rgba(10,10,10,0.7); backdrop-filter:blur(4px); display:flex; align-items:center; justify-content:center;
+  cursor:grab; color:var(--gold-light); font-size:0.9rem;
+}
+.pcard-order{
+  position:absolute; top:8px; right:8px; width:24px; height:24px; border-radius:50%;
+  background:rgba(10,10,10,0.7); color:var(--white-soft); font-size:0.7rem; font-weight:700;
+  display:flex; align-items:center; justify-content:center;
+}
+.pcard-body{ padding:14px; }
+.pcard-ref{ font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--white-faint); }
+.pcard-name{ font-size:0.95rem; font-weight:700; margin:4px 0 12px; line-height:1.3; min-height:2.4em; }
+.pcard-actions{ display:flex; gap:8px; flex-wrap:wrap; }
+.pcard-move{ display:flex; gap:4px; margin-top:8px; }
+.pcard-move button{
+  flex:1; padding:6px; border-radius:var(--radius-sm); border:1px solid var(--line); background:transparent;
+  color:var(--white-soft); font-size:0.8rem;
+}
+.pcard-move button:hover{ border-color:var(--gold-dim); color:var(--gold-light); }
+
+.add-card{
+  border:1px dashed var(--gold-dim); border-radius:var(--radius-md); aspect-ratio:3/4;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px;
+  background:rgba(200,161,90,0.04); transition:border-color .3s, background .3s;
+  color:var(--gold-light); font-weight:700; font-size:0.85rem; text-align:center; padding:16px;
+}
+.add-card:hover{ border-color:var(--gold); background:rgba(200,161,90,0.08); }
+.add-card .plus{ font-size:2rem; line-height:1; font-weight:400; }
+
+.empty-msg{ color:var(--white-faint); font-size:0.9rem; padding:30px 0; text-align:center; }
+
+/* ---------- modal ---------- */
+.modal-overlay{
+  position:fixed; inset:0; background:rgba(5,5,5,0.85); backdrop-filter:blur(4px); z-index:200;
+  display:flex; align-items:center; justify-content:center; padding:20px;
+  opacity:0; visibility:hidden; transition:opacity .3s, visibility .3s;
+}
+.modal-overlay.open{ opacity:1; visibility:visible; }
+.modal{
+  width:100%; max-width:440px; background:var(--black-card); border:1px solid var(--line);
+  border-radius:var(--radius-lg); padding:28px; max-height:90vh; overflow-y:auto;
+}
+.modal h3{ font-size:1.4rem; margin-bottom:18px; }
+.modal .field input[type="text"]{ width:100%; }
+.preview-box{
+  width:100%; aspect-ratio:3/4; max-height:280px; border-radius:var(--radius-md);
+  background:var(--black-soft); border:1px solid var(--line); overflow:hidden;
+  display:flex; align-items:center; justify-content:center; margin-bottom:16px; position:relative;
+}
+.preview-box img{ width:100%; height:100%; object-fit:cover; }
+.preview-box .placeholder{ color:var(--white-faint); font-size:0.82rem; text-align:center; padding:20px; }
+.file-input-btn{
+  display:block; width:100%; text-align:center; padding:12px; border-radius:var(--radius-sm);
+  border:1px solid var(--line); color:var(--white-soft); font-size:0.85rem; margin-bottom:16px;
+  background:transparent; transition:border-color .3s;
+}
+.file-input-btn:hover{ border-color:var(--gold-dim); color:var(--gold-light); }
+.modal-actions{ display:flex; gap:10px; margin-top:20px; }
+.modal-actions .btn{ flex:1; }
+.upload-status{ font-size:0.8rem; color:var(--white-faint); margin-top:10px; min-height:1.2em; text-align:center; }
+.upload-status.error{ color:var(--danger-light); }
+.upload-status.ok{ color:var(--success); }
+
+.confirm-modal p{ color:var(--white-soft); font-size:0.92rem; margin:6px 0 4px; }
+.confirm-modal .prod-name{ color:var(--gold-light); font-weight:700; }
+
+/* ---------- toast ---------- */
+.toast{
+  position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(20px);
+  background:var(--black-card); border:1px solid var(--gold-dim); color:var(--white);
+  padding:14px 24px; border-radius:100px; font-size:0.85rem; font-weight:600; z-index:300;
+  opacity:0; visibility:hidden; transition:opacity .3s, transform .3s, visibility .3s;
+  box-shadow:0 20px 50px -20px rgba(0,0,0,0.7); max-width:90vw; text-align:center;
+}
+.toast.show{ opacity:1; visibility:visible; transform:translateX(-50%) translateY(0); }
+.toast.error{ border-color:rgba(217,105,90,0.6); }
+
+/* ---------- loading ---------- */
+.spinner{
+  width:18px; height:18px; border-radius:50%; border:2px solid rgba(248,246,241,0.25);
+  border-top-color:var(--gold); animation:spin 0.8s linear infinite; display:inline-block;
+}
+@keyframes spin{ to{ transform:rotate(360deg); } }
+.loading-row{ display:flex; align-items:center; justify-content:center; gap:10px; padding:40px 0; color:var(--white-faint); }
+
+@media (max-width:600px){
+  .grid{ grid-template-columns:repeat(2,1fr); gap:12px; }
+  .section-head h2{ font-size:1.4rem; }
+  .pcard-name{ font-size:0.85rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     TELA DE LOGIN
+============================================================ -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-card">
+    <h1>Área da Cliente</h1>
+    <p>Gerenciamento de produtos — Raquiel Fitness &amp; Acessórios</p>
+    <form id="loginForm">
+      <div class="field">
+        <label for="loginEmail">E-mail</label>
+        <input type="email" id="loginEmail" required autocomplete="username">
+      </div>
+      <div class="field">
+        <label for="loginPassword">Senha</label>
+        <input type="password" id="loginPassword" required autocomplete="current-password">
+      </div>
+      <button type="submit" class="btn btn-gold" id="loginBtn">Entrar</button>
+      <div class="login-error" id="loginError"></div>
+    </form>
+  </div>
+</div>
+
+<!-- ============================================================
+     PAINEL (visível só depois do login)
+============================================================ -->
+<div class="app" id="app">
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <div class="brand">Painel de Produtos<small>Raquiel Fitness &amp; Acessórios</small></div>
+      <div style="display:flex; gap:10px; align-items:center;">
+        <a class="btn btn-outline btn-sm" href="/fitness-acessorios.html" target="_blank" rel="noopener">Ver site</a>
+        <button class="btn btn-outline btn-sm" id="logoutBtn">Sair</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <!-- ROUPAS FITNESS -->
+    <section class="section-block" id="section-roupas">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Vitrine "Moda Fitness"</div>
+          <h2>Roupas Fitness</h2>
+        </div>
+        <button class="btn btn-gold" data-add="roupas">+ Adicionar produto</button>
+      </div>
+      <div class="grid" id="grid-roupas">
+        <div class="loading-row"><span class="spinner"></span> Carregando produtos…</div>
+      </div>
+    </section>
+
+    <div class="wrap"><div class="divider"></div></div>
+
+    <!-- SEMIJOIAS -->
+    <section class="section-block" id="section-semijoias">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Vitrine "Semijoias"</div>
+          <h2>Semijoias</h2>
+        </div>
+        <button class="btn btn-gold" data-add="semijoias">+ Adicionar produto</button>
+      </div>
+      <div class="grid" id="grid-semijoias">
+        <div class="loading-row"><span class="spinner"></span> Carregando produtos…</div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- ============================================================
+     MODAL: adicionar / editar produto
+============================================================ -->
+<div class="modal-overlay" id="productModalOverlay">
+  <div class="modal">
+    <h3 id="productModalTitle">Adicionar produto</h3>
+    <div class="preview-box" id="previewBox">
+      <div class="placeholder" id="previewPlaceholder">Nenhuma foto selecionada</div>
+      <img id="previewImg" style="display:none;" alt="Pré-visualização">
+    </div>
+    <button type="button" class="file-input-btn" id="fileInputBtn">Escolher foto do computador / celular</button>
+    <input type="file" id="fileInput" accept="image/jpeg,image/jpg,image/png,image/webp" style="display:none;">
+    <div class="field">
+      <label for="fieldNome">Nome do produto</label>
+      <input type="text" id="fieldNome" placeholder="Ex: Short Smart Super Liso">
+    </div>
+    <div class="field" id="fieldRefWrap">
+      <label for="fieldRef">Referência (opcional)</label>
+      <input type="text" id="fieldRef" placeholder="Ex: 3172">
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" id="productCancelBtn">Cancelar</button>
+      <button class="btn btn-gold" id="productSaveBtn">Salvar</button>
+    </div>
+    <div class="upload-status" id="uploadStatus"></div>
+  </div>
+</div>
+
+<!-- ============================================================
+     MODAL: confirmar remoção
+============================================================ -->
+<div class="modal-overlay" id="confirmModalOverlay">
+  <div class="modal confirm-modal">
+    <h3>Remover produto</h3>
+    <p>Tem certeza que deseja remover este produto?</p>
+    <p class="prod-name" id="confirmProdName"></p>
+    <p style="color:var(--white-faint); font-size:0.8rem;">Essa ação não pode ser desfeita.</p>
+    <div class="modal-actions">
+      <button class="btn btn-outline" id="confirmCancelBtn">Cancelar</button>
+      <button class="btn btn-danger" id="confirmDeleteBtn">Remover</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- ============================================================
+     JAVASCRIPT
+============================================================ -->
+<script>
+(function(){
+"use strict";
+
+/* ---------- 1. Cliente Supabase ---------- */
+if(!window.SUPABASE_URL || window.SUPABASE_URL.indexOf("COLE_AQUI") === 0){
+  document.getElementById('loginError').textContent = 'Configuração pendente: preencha SUPABASE_URL e SUPABASE_ANON_KEY no topo deste arquivo.';
+}
+var sb = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+var BUCKET = window.PRODUTOS_BUCKET || 'produtos-fotos';
+
+/* ---------- 2. Estado ---------- */
+var state = {
+  roupas: [],
+  semijoias: [],
+  editing: null,     // produto sendo editado (null = criando novo)
+  editingCategoria: null,
+  selectedFile: null, // Blob já comprimido, pronto para upload
+  dragged: null
+};
+
+var els = {
+  loginScreen: document.getElementById('loginScreen'),
+  loginForm: document.getElementById('loginForm'),
+  loginEmail: document.getElementById('loginEmail'),
+  loginPassword: document.getElementById('loginPassword'),
+  loginBtn: document.getElementById('loginBtn'),
+  loginError: document.getElementById('loginError'),
+  app: document.getElementById('app'),
+  logoutBtn: document.getElementById('logoutBtn'),
+  gridRoupas: document.getElementById('grid-roupas'),
+  gridSemijoias: document.getElementById('grid-semijoias'),
+  productModalOverlay: document.getElementById('productModalOverlay'),
+  productModalTitle: document.getElementById('productModalTitle'),
+  previewBox: document.getElementById('previewBox'),
+  previewImg: document.getElementById('previewImg'),
+  previewPlaceholder: document.getElementById('previewPlaceholder'),
+  fileInputBtn: document.getElementById('fileInputBtn'),
+  fileInput: document.getElementById('fileInput'),
+  fieldNome: document.getElementById('fieldNome'),
+  fieldRef: document.getElementById('fieldRef'),
+  fieldRefWrap: document.getElementById('fieldRefWrap'),
+  productCancelBtn: document.getElementById('productCancelBtn'),
+  productSaveBtn: document.getElementById('productSaveBtn'),
+  uploadStatus: document.getElementById('uploadStatus'),
+  confirmModalOverlay: document.getElementById('confirmModalOverlay'),
+  confirmProdName: document.getElementById('confirmProdName'),
+  confirmCancelBtn: document.getElementById('confirmCancelBtn'),
+  confirmDeleteBtn: document.getElementById('confirmDeleteBtn'),
+  toast: document.getElementById('toast')
+};
+var productToDelete = null;
+
+/* ---------- 3. Toast ---------- */
+var toastTimer = null;
+function showToast(msg, isError){
+  els.toast.textContent = msg;
+  els.toast.className = 'toast show' + (isError ? ' error' : '');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function(){ els.toast.className = 'toast'; }, 3200);
+}
+
+/* ---------- 4. Autenticação ---------- */
+async function checkSession(){
+  var { data } = await sb.auth.getSession();
+  if(data && data.session){
+    showApp();
+  } else {
+    showLogin();
+  }
+}
+
+function showLogin(){
+  els.loginScreen.style.display = 'flex';
+  els.app.classList.remove('visible');
+}
+
+function showApp(){
+  els.loginScreen.style.display = 'none';
+  els.app.classList.add('visible');
+  loadProducts('roupas');
+  loadProducts('semijoias');
+}
+
+els.loginForm.addEventListener('submit', async function(e){
+  e.preventDefault();
+  els.loginError.textContent = '';
+  els.loginBtn.disabled = true;
+  els.loginBtn.textContent = 'Entrando…';
+  var { error } = await sb.auth.signInWithPassword({
+    email: els.loginEmail.value.trim(),
+    password: els.loginPassword.value
+  });
+  els.loginBtn.disabled = false;
+  els.loginBtn.textContent = 'Entrar';
+  if(error){
+    els.loginError.textContent = 'E-mail ou senha incorretos.';
+    return;
+  }
+  showApp();
+});
+
+els.logoutBtn.addEventListener('click', async function(){
+  await sb.auth.signOut();
+  showLogin();
+});
+
+/* ---------- 5. Carregar produtos ---------- */
+async function loadProducts(categoria){
+  var grid = categoria === 'roupas' ? els.gridRoupas : els.gridSemijoias;
+  var { data, error } = await sb
+    .from('produtos')
+    .select('*')
+    .eq('categoria', categoria)
+    .order('ordem', { ascending: true });
+
+  if(error){
+    grid.innerHTML = '<div class="empty-msg">Não foi possível carregar os produtos. Verifique a configuração do Supabase.</div>';
+    console.error(error);
+    return;
+  }
+  state[categoria] = data || [];
+  renderGrid(categoria);
+}
+
+/* ---------- 6. Renderizar grade ---------- */
+function renderGrid(categoria){
+  var grid = categoria === 'roupas' ? els.gridRoupas : els.gridSemijoias;
+  var items = state[categoria];
+  grid.innerHTML = '';
+
+  items.forEach(function(p, idx){
+    var card = document.createElement('div');
+    card.className = 'pcard';
+    card.setAttribute('draggable', 'true');
+    card.dataset.id = p.id;
+    card.dataset.categoria = categoria;
+
+    var refHtml = (categoria === 'roupas' && p.referencia)
+      ? '<div class="pcard-ref">Ref. ' + escapeHtml(p.referencia) + '</div>' : '';
+
+    card.innerHTML =
+      '<div class="pcard-media">' +
+        '<img src="' + p.imagem_url + '" alt="' + escapeHtml(p.nome) + '" loading="lazy">' +
+        '<div class="pcard-drag-handle" title="Arraste para reordenar">⠿</div>' +
+        '<div class="pcard-order">' + (idx + 1) + '</div>' +
+      '</div>' +
+      '<div class="pcard-body">' +
+        refHtml +
+        '<div class="pcard-name">' + escapeHtml(p.nome) + '</div>' +
+        '<div class="pcard-actions">' +
+          '<button class="btn btn-outline btn-sm" data-edit>Alterar</button>' +
+          '<button class="btn btn-danger btn-sm" data-remove>Remover</button>' +
+        '</div>' +
+        '<div class="pcard-move">' +
+          '<button data-move="up" ' + (idx === 0 ? 'disabled' : '') + '>▲ Mover para cima</button>' +
+          '<button data-move="down" ' + (idx === items.length - 1 ? 'disabled' : '') + '>▼ Mover para baixo</button>' +
+        '</div>' +
+      '</div>';
+
+    card.querySelector('[data-edit]').addEventListener('click', function(){ openEditModal(categoria, p); });
+    card.querySelector('[data-remove]').addEventListener('click', function(){ openConfirmDelete(categoria, p); });
+    card.querySelector('[data-move="up"]').addEventListener('click', function(){ moveProduct(categoria, idx, idx - 1); });
+    card.querySelector('[data-move="down"]').addEventListener('click', function(){ moveProduct(categoria, idx, idx + 1); });
+
+    bindDragEvents(card, categoria);
+    grid.appendChild(card);
+  });
+
+  // card de adicionar, sempre por último
+  var addCard = document.createElement('button');
+  addCard.type = 'button';
+  addCard.className = 'add-card';
+  addCard.innerHTML = '<span class="plus">+</span><span>Adicionar produto</span>';
+  addCard.addEventListener('click', function(){ openAddModal(categoria); });
+  grid.appendChild(addCard);
+
+  if(items.length === 0){
+    var empty = document.createElement('div');
+    empty.className = 'empty-msg';
+    empty.style.gridColumn = '1 / -1';
+    empty.textContent = 'Nenhum produto cadastrado ainda nesta seção.';
+    grid.insertBefore(empty, addCard);
+  }
+}
+
+function escapeHtml(str){
+  var d = document.createElement('div');
+  d.textContent = str || '';
+  return d.innerHTML;
+}
+
+/* ---------- 7. Reordenar (botões ▲▼, funciona em qualquer dispositivo) ---------- */
+async function moveProduct(categoria, fromIdx, toIdx){
+  var items = state[categoria];
+  if(toIdx < 0 || toIdx >= items.length) return;
+  var moved = items.splice(fromIdx, 1)[0];
+  items.splice(toIdx, 0, moved);
+  renderGrid(categoria);
+  await persistOrder(categoria);
+}
+
+/* ---------- 7b. Reordenar via arrastar e soltar (desktop) ---------- */
+function bindDragEvents(card, categoria){
+  card.addEventListener('dragstart', function(){
+    state.dragged = { id: card.dataset.id, categoria: categoria };
+    card.classList.add('dragging');
+  });
+  card.addEventListener('dragend', function(){
+    card.classList.remove('dragging');
+  });
+  card.addEventListener('dragover', function(e){
+    e.preventDefault();
+    if(state.dragged && state.dragged.categoria === categoria){
+      card.classList.add('drag-over');
+    }
+  });
+  card.addEventListener('dragleave', function(){
+    card.classList.remove('drag-over');
+  });
+  card.addEventListener('drop', async function(e){
+    e.preventDefault();
+    card.classList.remove('drag-over');
+    if(!state.dragged || state.dragged.categoria !== categoria) return;
+    var items = state[categoria];
+    var fromIdx = items.findIndex(function(p){ return p.id === state.dragged.id; });
+    var toIdx = items.findIndex(function(p){ return p.id === card.dataset.id; });
+    if(fromIdx === -1 || toIdx === -1 || fromIdx === toIdx) return;
+    var moved = items.splice(fromIdx, 1)[0];
+    items.splice(toIdx, 0, moved);
+    renderGrid(categoria);
+    await persistOrder(categoria);
+    state.dragged = null;
+  });
+}
+
+async function persistOrder(categoria){
+  var items = state[categoria];
+  var updates = items.map(function(p, idx){
+    return sb.from('produtos').update({ ordem: idx }).eq('id', p.id);
+  });
+  var results = await Promise.all(updates);
+  var hasError = results.some(function(r){ return r.error; });
+  if(hasError){
+    showToast('Não foi possível salvar a nova ordem. Tente novamente.', true);
+  } else {
+    showToast('Ordem atualizada.');
+  }
+}
+
+/* ---------- 8. Modal adicionar/editar ---------- */
+function openAddModal(categoria){
+  state.editing = null;
+  state.editingCategoria = categoria;
+  state.selectedFile = null;
+  els.productModalTitle.textContent = categoria === 'roupas' ? 'Adicionar peça — Roupas Fitness' : 'Adicionar peça — Semijoias';
+  els.fieldNome.value = '';
+  els.fieldRef.value = '';
+  els.fieldRefWrap.style.display = categoria === 'roupas' ? 'block' : 'none';
+  els.previewImg.style.display = 'none';
+  els.previewPlaceholder.style.display = 'block';
+  els.uploadStatus.textContent = '';
+  els.uploadStatus.className = 'upload-status';
+  els.fileInput.value = '';
+  els.productModalOverlay.classList.add('open');
+}
+
+function openEditModal(categoria, produto){
+  state.editing = produto;
+  state.editingCategoria = categoria;
+  state.selectedFile = null;
+  els.productModalTitle.textContent = 'Editar produto';
+  els.fieldNome.value = produto.nome;
+  els.fieldRef.value = produto.referencia || '';
+  els.fieldRefWrap.style.display = categoria === 'roupas' ? 'block' : 'none';
+  els.previewImg.src = produto.imagem_url;
+  els.previewImg.style.display = 'block';
+  els.previewPlaceholder.style.display = 'none';
+  els.uploadStatus.textContent = '';
+  els.uploadStatus.className = 'upload-status';
+  els.fileInput.value = '';
+  els.productModalOverlay.classList.add('open');
+}
+
+function closeProductModal(){
+  els.productModalOverlay.classList.remove('open');
+  state.selectedFile = null;
+}
+
+els.productCancelBtn.addEventListener('click', closeProductModal);
+els.productModalOverlay.addEventListener('click', function(e){
+  if(e.target === els.productModalOverlay) closeProductModal();
+});
+
+els.fileInputBtn.addEventListener('click', function(){ els.fileInput.click(); });
+
+els.fileInput.addEventListener('change', async function(){
+  var file = els.fileInput.files[0];
+  if(!file) return;
+
+  var validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+  if(validTypes.indexOf(file.type) === -1){
+    els.uploadStatus.textContent = 'Formato não aceito. Envie JPG, PNG ou WEBP.';
+    els.uploadStatus.className = 'upload-status error';
+    els.fileInput.value = '';
+    return;
+  }
+  if(file.size > 25 * 1024 * 1024){
+    els.uploadStatus.textContent = 'Essa imagem é muito grande (máximo 25MB).';
+    els.uploadStatus.className = 'upload-status error';
+    els.fileInput.value = '';
+    return;
+  }
+
+  els.uploadStatus.textContent = 'Preparando imagem…';
+  els.uploadStatus.className = 'upload-status';
+
+  try{
+    var compressed = await compressImage(file, 1400, 0.85);
+    state.selectedFile = compressed;
+    var url = URL.createObjectURL(compressed);
+    els.previewImg.src = url;
+    els.previewImg.style.display = 'block';
+    els.previewPlaceholder.style.display = 'none';
+    els.uploadStatus.textContent = 'Foto pronta. Clique em Salvar para publicar.';
+  } catch(err){
+    console.error(err);
+    els.uploadStatus.textContent = 'Não foi possível processar essa imagem.';
+    els.uploadStatus.className = 'upload-status error';
+  }
+});
+
+/* Redimensiona/comprime a imagem no navegador antes do upload,
+   evitando arquivos gigantes e mantendo boa qualidade visual. */
+function compressImage(file, maxDim, quality){
+  return new Promise(function(resolve, reject){
+    var img = new Image();
+    var reader = new FileReader();
+    reader.onload = function(e){ img.src = e.target.result; };
+    reader.onerror = reject;
+    img.onload = function(){
+      var w = img.width, h = img.height;
+      if(w > h && w > maxDim){ h = Math.round(h * (maxDim / w)); w = maxDim; }
+      else if(h > maxDim){ w = Math.round(w * (maxDim / h)); h = maxDim; }
+      var canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      var ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, w, h);
+      canvas.toBlob(function(blob){
+        if(blob) resolve(blob); else reject(new Error('Falha ao gerar imagem'));
+      }, 'image/jpeg', quality);
+    };
+    img.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+els.productSaveBtn.addEventListener('click', async function(){
+  var nome = els.fieldNome.value.trim();
+  var referencia = els.fieldRef.value.trim();
+  var categoria = state.editingCategoria;
+
+  if(!nome){
+    els.uploadStatus.textContent = 'Digite o nome do produto.';
+    els.uploadStatus.className = 'upload-status error';
+    return;
+  }
+  if(!state.editing && !state.selectedFile){
+    els.uploadStatus.textContent = 'Escolha uma foto para o produto.';
+    els.uploadStatus.className = 'upload-status error';
+    return;
+  }
+
+  els.productSaveBtn.disabled = true;
+  els.productSaveBtn.textContent = 'Salvando…';
+  els.uploadStatus.textContent = '';
+  els.uploadStatus.className = 'upload-status';
+
+  try{
+    var imagemPath = state.editing ? state.editing.imagem_path : null;
+    var imagemUrl = state.editing ? state.editing.imagem_url : null;
+    var oldPath = state.editing ? state.editing.imagem_path : null;
+
+    if(state.selectedFile){
+      var fileName = categoria + '/' + Date.now() + '-' + Math.random().toString(36).slice(2, 8) + '.jpg';
+      var { error: uploadError } = await sb.storage.from(BUCKET).upload(fileName, state.selectedFile, {
+        contentType: 'image/jpeg',
+        cacheControl: '3600'
+      });
+      if(uploadError) throw uploadError;
+      var { data: urlData } = sb.storage.from(BUCKET).getPublicUrl(fileName);
+      imagemPath = fileName;
+      imagemUrl = urlData.publicUrl;
+    }
+
+    if(state.editing){
+      var { error: updateError } = await sb.from('produtos').update({
+        nome: nome,
+        referencia: referencia || null,
+        imagem_path: imagemPath,
+        imagem_url: imagemUrl
+      }).eq('id', state.editing.id);
+      if(updateError) throw updateError;
+
+      // se trocou a foto, apaga a antiga do storage para não acumular arquivos
+      if(state.selectedFile && oldPath){
+        await sb.storage.from(BUCKET).remove([oldPath]);
+      }
+    } else {
+      var nextOrder = state[categoria].length;
+      var { error: insertError } = await sb.from('produtos').insert({
+        categoria: categoria,
+        nome: nome,
+        referencia: referencia || null,
+        imagem_path: imagemPath,
+        imagem_url: imagemUrl,
+        ordem: nextOrder
+      });
+      if(insertError) throw insertError;
+    }
+
+    closeProductModal();
+    await loadProducts(categoria);
+    showToast(state.editing ? 'Produto atualizado.' : 'Produto adicionado.');
+  } catch(err){
+    console.error(err);
+    els.uploadStatus.textContent = 'Erro ao salvar. Verifique sua conexão e tente novamente.';
+    els.uploadStatus.className = 'upload-status error';
+  } finally {
+    els.productSaveBtn.disabled = false;
+    els.productSaveBtn.textContent = 'Salvar';
+  }
+});
+
+/* ---------- 9. Remover produto ---------- */
+function openConfirmDelete(categoria, produto){
+  productToDelete = { categoria: categoria, produto: produto };
+  els.confirmProdName.textContent = produto.nome;
+  els.confirmModalOverlay.classList.add('open');
+}
+function closeConfirmModal(){
+  els.confirmModalOverlay.classList.remove('open');
+  productToDelete = null;
+}
+els.confirmCancelBtn.addEventListener('click', closeConfirmModal);
+els.confirmModalOverlay.addEventListener('click', function(e){
+  if(e.target === els.confirmModalOverlay) closeConfirmModal();
+});
+
+els.confirmDeleteBtn.addEventListener('click', async function(){
+  if(!productToDelete) return;
+  var categoria = productToDelete.categoria;
+  var produto = productToDelete.produto;
+  els.confirmDeleteBtn.disabled = true;
+  els.confirmDeleteBtn.textContent = 'Removendo…';
+  try{
+    await sb.storage.from(BUCKET).remove([produto.imagem_path]);
+    var { error } = await sb.from('produtos').delete().eq('id', produto.id);
+    if(error) throw error;
+    closeConfirmModal();
+    await loadProducts(categoria);
+    await persistOrder(categoria);
+    showToast('Produto removido.');
+  } catch(err){
+    console.error(err);
+    showToast('Não foi possível remover o produto.', true);
+  } finally {
+    els.confirmDeleteBtn.disabled = false;
+    els.confirmDeleteBtn.textContent = 'Remover';
+  }
+});
+
+/* ---------- 10. Início ---------- */
+checkSession();
+
+})();
+</script>
+</body>
+</html>
