@@ -29,6 +29,20 @@
 <link rel="icon" type="image/png" sizes="192x192" href="/favicon/acessorios-favicon-192x192.png?v=2">
 <link rel="apple-touch-icon" sizes="180x180" href="/favicon/acessorios-favicon-apple-touch-icon.png?v=2">
 
+<!-- ============================================================
+     CONFIGURAÇÃO DO SUPABASE (leitura pública dos produtos)
+     Mesmos dois valores usados em /admin/index.html — Project
+     Settings → API no painel do Supabase. A "anon public key" é
+     segura para ficar aqui: ela só permite LEITURA dos produtos,
+     porque é isso que a regra de segurança (RLS) do banco permite
+     para quem não está logado.
+============================================================ -->
+<script>
+  window.SUPABASE_URL = "https://jwmjahmrumzhynmvesxi.supabase.co";
+  window.SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp3bWphaG1ydW16aHlubXZlc3hpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAzNzE0NzksImV4cCI6MjEwNTk0NzQ3OX0.-FghIpgPGnrubqVuI7oOYtRof62neQQLYANrOoXLE2w";
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -222,6 +236,7 @@ h1,h2,h3,h4{ font-family:var(--font-display); font-weight:600; line-height:1.15;
 .product-code{ font-size:0.68rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--white-faint); }
 .product-info h3{ font-size:1.15rem; font-weight:600; margin:6px 0 16px; line-height:1.3; }
 .hidden-card{ display:none; }
+.loading-row{ grid-column:1/-1; text-align:center; padding:50px 0; color:var(--white-faint); font-size:0.9rem; }
 .show-more-wrap{ display:flex; justify-content:center; margin-top:44px; }
 
 @media (max-width:960px){ .products-grid{ grid-template-columns:repeat(2,1fr); } }
@@ -485,266 +500,7 @@ h1,h2,h3,h4{ font-family:var(--font-display); font-weight:600; line-height:1.15;
     </div>
 
     <div class="products-grid" id="productsGrid">
-      <article class="product-card" data-index="0">
-        <div class="product-media">
-          <img src="images/acessorios/roupas-produtos/3172-short-smart-super-liso.jpeg" alt="Short Smart Super Liso - Raquiel Fitness e Acessórios" loading="lazy">
-        </div>
-        <div class="product-info">
-          <span class="product-code">Ref. 3172</span>
-          <h3>Short Smart Super Liso</h3>
-          <a class="btn btn-outline-sm" href="https://wa.me/5521964927008?text=Ol%C3%A1%21%20Tenho%20interesse%20na%20pe%C3%A7a%20%22Short%20Smart%20Super%20Liso%22%20da%20Raquiel%20Fitness%20e%20Acess%C3%B3rios.%20Poderia%20me%20passar%20mais%20informa%C3%A7%C3%B5es%3F" target="_blank" rel="noopener">Tenho interesse</a>
-        </div>
-      </article>
-      <article class="product-card" data-index="1">
-        <div class="product-media">
-          <img src="images/acessorios/roupas-produtos/3208-cigarrete-jackar-premium-tiles.jpeg" alt="Cigarrete Jackar Premium Tiles - Raquiel Fitness e Acessórios" loading="lazy">
-        </div>
-        <div class="product-info">
-          <span class="product-code">Ref. 3208</span>
-          <h3>Cigarrete Jackar Premium Tiles</h3>
-          <a class="btn btn-outline-sm" href="https://wa.me/5521964927008?text=Ol%C3%A1%21%20Tenho%20interesse%20na%20pe%C3%A7a%20%22Cigarrete%20Jackar%20Premium%20Tiles%22%20da%20Raquiel%20Fitness%20e%20Acess%C3%B3rios.%20Poderia%20me%20passar%20mais%20informa%C3%A7%C3%B5es%3F" target="_blank" rel="noopener">Tenho interesse</a>
-        </div>
-      </article>
-      <article class="product-card" data-index="2">
-        <div class="product-media">
-          <img src="images/acessorios/roupas-produtos/3209-top-cler-jackar-premium-tiles-com-bojo.jpeg" alt="Top Cler Jackar Premium Tiles Com Bojo - Raquiel Fitness e Acessórios" loading="lazy">
-        </div>
-        <div class="product-info">
-          <span class="product-code">Ref. 3209</span>
-          <h3>Top Cler Jackar Premium Tiles Com Bojo</h3>
-          <a class="btn btn-outline-sm" href="https://wa.me/5521964927008?text=Ol%C3%A1%21%20Tenho%20interesse%20na%20pe%C3%A7a%20%22Top%20Cler%20Jackar%20Premium%20Tiles%20Com%20Bojo%22%20da%20Raquiel%20Fitness%20e%20Acess%C3%B3rios.%20Poderia%20me%20passar%20mais%20informa%C3%A7%C3%B5es%3F" target="_blank" rel="noopener">Tenho interesse</a>
-        </div>
-      </article>
-      <article class="product-card" data-index="3">
-        <div class="product-media">
-          <img src="images/acessorios/roupas-produtos/3264-cigarrete-ikat-w007.jpeg" alt="Cigarrete Ikat W007 - Raquiel Fitness e Acessórios" loading="lazy">
-        </div>
-        <div class="product-info">
-          <span class="product-code">Ref. 3264</span>
-          <h3>Cigarrete Ikat W007</h3>
-          <a class="btn btn-outline-sm" href="https://wa.me/5521964927008?text=Ol%C3%A1%21%20Tenho%20interesse%20na%20pe%C3%A7a%20%22Cigarrete%20Ikat%20W007%22%20da%20Raquiel%20Fitness%20e%20Acess%C3%B3rios.%20Poderia%20me%20passar%20mais%20informa%C3%A7%C3%B5es%3F" target="_blank" rel="noopener">Tenho interesse</a>
-        </div>
-      </article>
-      <article class="product-card" data-index="4">
-        <div class="product-media">
-          <img src="images/acessorios/roupas-produtos/3678-casaco-ayla-granize.jpeg" alt="Casaco Ayla Granize - Raquiel Fitness e Acessórios" loading="lazy">
-        </div>
-        <div class="product-info">
-          <span class="product-code">Ref. 3678</span>
-          <h3>Casaco Ayla Granize</h3>
-          <a class="btn btn-outline-sm" href="https://wa.me/5521964927008?text=Ol%C3%A1%21%20Tenho%20interesse%20na%20pe%C3%A7a%20%22Casaco%20Ayla%20Granize%22%20da%20Raquiel%20Fitness%20e%20Acess%C3%B3rios.%20Poderia%20me%20passar%20mais%20informa%C3%A7%C3%B5es%3F" target="_blank" rel="noopener">Tenho interesse</a>
-        </div>
-      </article>
-      <article class="product-card" data-index="5">
-        <div class="product-media">
-          <img src="images/acessorios/roupas-produtos/3695-cigarrete-w007-power-blackout.jpeg" alt="Cigarrete W007 Power Blackout - Raquiel Fitness e Acessórios" loading="lazy">
-        </div>
-        <div class="product-info">
-          <span class="product-code">Ref. 3695</span>
-          <h3>Cigarrete W007 Power Blackout</h3>
-          <a class="btn btn-outline-sm" href="https://wa.me/5521964927008?text=Ol%C3%A1%21%20Tenho%20interesse%20na%20pe%C3%A7a%20%22Cigarrete%20W007%20Power%20Blackout%22%20da%20Raquiel%20Fitness%20e%20Acess%C3%B3rios.%20Poderia%20me%20passar%20mais%20informa%C3%A7%C3%B5es%3F" target="_blank" rel="noopener">Tenho interesse</a>
-        </div>
-      </article>
-      <article class="product-card" data-index="6">
-        <div class="product-media">
-          <img src="images/acessorios/roupas-produtos/3712-cors-rio-carla-blackout.jpeg" alt="Corsário Carla Blackout - Raquiel Fitness e Acessórios" loading="lazy">
-        </div>
-        <div class="product-info">
-          <span class="product-code">Ref. 3712</span>
-          <h3>Corsário Carla Blackout</h3>
-          <a class="btn btn-outline-sm" href="https://wa.me/5521964927008?text=Ol%C3%A1%21%20Tenho%20interesse%20na%20pe%C3%A7a%20%22Cors%C3%A1rio%20Carla%20Blackout%22%20da%20Raquiel%20Fitness%20e%20Acess%C3%B3rios.%20Poderia%20me%20passar%20mais%20informa%C3%A7%C3%B5es%3F" target="_blank" rel="noopener">Tenho interesse</a>
-        </div>
-      </article>
-      <article class="product-card" data-index="7">
-        <div class="product-media">
-          <img src="images/acessorios/roupas-produtos/3768-bermuda-tayna-pettenat.jpeg" alt="Bermuda Tayna Pettenat - Raquiel Fitness e Acessórios" loading="lazy">
-        </div>
-        <div class="product-info">
-          <span class="product-code">Ref. 3768</span>
-          <h3>Bermuda Tayna Pettenat</h3>
-          <a class="btn btn-outline-sm" href="https://wa.me/5521964927008?text=Ol%C3%A1%21%20Tenho%20interesse%20na%20pe%C3%A7a%20%22Bermuda%20Tayna%20Pettenat%22%20da%20Raquiel%20Fitness%20e%20Acess%C3%B3rios.%20Poderia%20me%20passar%20mais%20informa%C3%A7%C3%B5es%3F" target="_blank" rel="noopener">Tenho interesse</a>
-        </div>
-      </article>
-      <article class="product-card hidden-card" data-index="8">
-        <div class="product-media">
-          <img src="images/acessorios/roupas-produtos/3772-top-melissa-power-blackout.jpeg" alt="Top Melissa Power Blackout - Raquiel Fitness e Acessórios" loading="lazy">
-        </div>
-        <div class="product-info">
-          <span class="product-code">Ref. 3772</span>
-          <h3>Top Melissa Power Blackout</h3>
-          <a class="btn btn-outline-sm" href="https://wa.me/5521964927008?text=Ol%C3%A1%21%20Tenho%20interesse%20na%20pe%C3%A7a%20%22Top%20Melissa%20Power%20Blackout%22%20da%20Raquiel%20Fitness%20e%20Acess%C3%B3rios.%20Poderia%20me%20passar%20mais%20informa%C3%A7%C3%B5es%3F" target="_blank" rel="noopener">Tenho interesse</a>
-        </div>
-      </article>
-      <article class="product-card hidden-card" data-index="9">
-        <div class="product-media">
-          <img src="images/acessorios/roupas-produtos/3775-bermuda-lu-still.jpeg" alt="Bermuda Lu Still - Raquiel Fitness e Acessórios" loading="lazy">
-        </div>
-        <div class="product-info">
-          <span class="product-code">Ref. 3775</span>
-          <h3>Bermuda Lu Still</h3>
-          <a class="btn btn-outline-sm" href="https://wa.me/5521964927008?text=Ol%C3%A1%21%20Tenho%20interesse%20na%20pe%C3%A7a%20%22Bermuda%20Lu%20Still%22%20da%20Raquiel%20Fitness%20e%20Acess%C3%B3rios.%20Poderia%20me%20passar%20mais%20informa%C3%A7%C3%B5es%3F" target="_blank" rel="noopener">Tenho interesse</a>
-        </div>
-      </article>
-      <article class="product-card hidden-card" data-index="10">
-        <div class="product-media">
-          <img src="images/acessorios/roupas-produtos/3787-macaquinho-isadora-power-blackout.jpeg" alt="Macaquinho Isadora Power Blackout - Raquiel Fitness e Acessórios" loading="lazy">
-        </div>
-        <div class="product-info">
-          <span class="product-code">Ref. 3787</span>
-          <h3>Macaquinho Isadora Power Blackout</h3>
-          <a class="btn btn-outline-sm" href="https://wa.me/5521964927008?text=Ol%C3%A1%21%20Tenho%20interesse%20na%20pe%C3%A7a%20%22Macaquinho%20Isadora%20Power%20Blackout%22%20da%20Raquiel%20Fitness%20e%20Acess%C3%B3rios.%20Poderia%20me%20passar%20mais%20informa%C3%A7%C3%B5es%3F" target="_blank" rel="noopener">Tenho interesse</a>
-        </div>
-      </article>
-      <article class="product-card hidden-card" data-index="11">
-        <div class="product-media">
-          <img src="images/acessorios/roupas-produtos/3831-bermuda-tayna-mescla-rosset.jpeg" alt="Bermuda Tayna Mescla Rosset - Raquiel Fitness e Acessórios" loading="lazy">
-        </div>
-        <div class="product-info">
-          <span class="product-code">Ref. 3831</span>
-          <h3>Bermuda Tayna Mescla Rosset</h3>
-          <a class="btn btn-outline-sm" href="https://wa.me/5521964927008?text=Ol%C3%A1%21%20Tenho%20interesse%20na%20pe%C3%A7a%20%22Bermuda%20Tayna%20Mescla%20Rosset%22%20da%20Raquiel%20Fitness%20e%20Acess%C3%B3rios.%20Poderia%20me%20passar%20mais%20informa%C3%A7%C3%B5es%3F" target="_blank" rel="noopener">Tenho interesse</a>
-        </div>
-      </article>
-      <article class="product-card hidden-card" data-index="12">
-        <div class="product-media">
-          <img src="images/acessorios/roupas-produtos/3851-macacao-elis-supreme-blackout.jpeg" alt="Macacao Elis Supreme Blackout - Raquiel Fitness e Acessórios" loading="lazy">
-        </div>
-        <div class="product-info">
-          <span class="product-code">Ref. 3851</span>
-          <h3>Macacao Elis Supreme Blackout</h3>
-          <a class="btn btn-outline-sm" href="https://wa.me/5521964927008?text=Ol%C3%A1%21%20Tenho%20interesse%20na%20pe%C3%A7a%20%22Macacao%20Elis%20Supreme%20Blackout%22%20da%20Raquiel%20Fitness%20e%20Acess%C3%B3rios.%20Poderia%20me%20passar%20mais%20informa%C3%A7%C3%B5es%3F" target="_blank" rel="noopener">Tenho interesse</a>
-        </div>
-      </article>
-      <article class="product-card hidden-card" data-index="13">
-        <div class="product-media">
-          <img src="images/acessorios/roupas-produtos/3860-bermuda-helena-neo-soul.jpeg" alt="Bermuda Helena Neo Soul - Raquiel Fitness e Acessórios" loading="lazy">
-        </div>
-        <div class="product-info">
-          <span class="product-code">Ref. 3860</span>
-          <h3>Bermuda Helena Neo Soul</h3>
-          <a class="btn btn-outline-sm" href="https://wa.me/5521964927008?text=Ol%C3%A1%21%20Tenho%20interesse%20na%20pe%C3%A7a%20%22Bermuda%20Helena%20Neo%20Soul%22%20da%20Raquiel%20Fitness%20e%20Acess%C3%B3rios.%20Poderia%20me%20passar%20mais%20informa%C3%A7%C3%B5es%3F" target="_blank" rel="noopener">Tenho interesse</a>
-        </div>
-      </article>
-      <article class="product-card hidden-card" data-index="14">
-        <div class="product-media">
-          <img src="images/acessorios/roupas-produtos/3862-bermuda-tayna-retalho-blackout-smart-super-neo-soul-supreme.jpeg" alt="Bermuda Tayna Retalho (blackout - Smart Super - Neo Soul - Supreme) - Raquiel Fitness e Acessórios" loading="lazy">
-        </div>
-        <div class="product-info">
-          <span class="product-code">Ref. 3862</span>
-          <h3>Bermuda Tayna Retalho (blackout - Smart Super - Neo Soul - Supreme)</h3>
-          <a class="btn btn-outline-sm" href="https://wa.me/5521964927008?text=Ol%C3%A1%21%20Tenho%20interesse%20na%20pe%C3%A7a%20%22Bermuda%20Tayna%20Retalho%20%28blackout%20-%20Smart%20Super%20-%20Neo%20Soul%20-%20Supreme%29%22%20da%20Raquiel%20Fitness%20e%20Acess%C3%B3rios.%20Poderia%20me%20passar%20mais%20informa%C3%A7%C3%B5es%3F" target="_blank" rel="noopener">Tenho interesse</a>
-        </div>
-      </article>
-      <article class="product-card hidden-card" data-index="15">
-        <div class="product-media">
-          <img src="images/acessorios/roupas-produtos/3863-top-eloisa-structure.jpeg" alt="Top Eloisa Structure - Raquiel Fitness e Acessórios" loading="lazy">
-        </div>
-        <div class="product-info">
-          <span class="product-code">Ref. 3863</span>
-          <h3>Top Eloisa Structure</h3>
-          <a class="btn btn-outline-sm" href="https://wa.me/5521964927008?text=Ol%C3%A1%21%20Tenho%20interesse%20na%20pe%C3%A7a%20%22Top%20Eloisa%20Structure%22%20da%20Raquiel%20Fitness%20e%20Acess%C3%B3rios.%20Poderia%20me%20passar%20mais%20informa%C3%A7%C3%B5es%3F" target="_blank" rel="noopener">Tenho interesse</a>
-        </div>
-      </article>
-      <article class="product-card hidden-card" data-index="16">
-        <div class="product-media">
-          <img src="images/acessorios/roupas-produtos/3872-short-elen-kapana.jpeg" alt="Short Elen Kapana - Raquiel Fitness e Acessórios" loading="lazy">
-        </div>
-        <div class="product-info">
-          <span class="product-code">Ref. 3872</span>
-          <h3>Short Elen Kapana</h3>
-          <a class="btn btn-outline-sm" href="https://wa.me/5521964927008?text=Ol%C3%A1%21%20Tenho%20interesse%20na%20pe%C3%A7a%20%22Short%20Elen%20Kapana%22%20da%20Raquiel%20Fitness%20e%20Acess%C3%B3rios.%20Poderia%20me%20passar%20mais%20informa%C3%A7%C3%B5es%3F" target="_blank" rel="noopener">Tenho interesse</a>
-        </div>
-      </article>
-      <article class="product-card hidden-card" data-index="17">
-        <div class="product-media">
-          <img src="images/acessorios/roupas-produtos/3874-cigarrete-mayra-kapana.jpeg" alt="Cigarrete Mayra Kapana - Raquiel Fitness e Acessórios" loading="lazy">
-        </div>
-        <div class="product-info">
-          <span class="product-code">Ref. 3874</span>
-          <h3>Cigarrete Mayra Kapana</h3>
-          <a class="btn btn-outline-sm" href="https://wa.me/5521964927008?text=Ol%C3%A1%21%20Tenho%20interesse%20na%20pe%C3%A7a%20%22Cigarrete%20Mayra%20Kapana%22%20da%20Raquiel%20Fitness%20e%20Acess%C3%B3rios.%20Poderia%20me%20passar%20mais%20informa%C3%A7%C3%B5es%3F" target="_blank" rel="noopener">Tenho interesse</a>
-        </div>
-      </article>
-      <article class="product-card hidden-card" data-index="18">
-        <div class="product-media">
-          <img src="images/acessorios/roupas-produtos/3879-top-estela-kapana.jpeg" alt="Top Estela Kapana - Raquiel Fitness e Acessórios" loading="lazy">
-        </div>
-        <div class="product-info">
-          <span class="product-code">Ref. 3879</span>
-          <h3>Top Estela Kapana</h3>
-          <a class="btn btn-outline-sm" href="https://wa.me/5521964927008?text=Ol%C3%A1%21%20Tenho%20interesse%20na%20pe%C3%A7a%20%22Top%20Estela%20Kapana%22%20da%20Raquiel%20Fitness%20e%20Acess%C3%B3rios.%20Poderia%20me%20passar%20mais%20informa%C3%A7%C3%B5es%3F" target="_blank" rel="noopener">Tenho interesse</a>
-        </div>
-      </article>
-      <article class="product-card hidden-card" data-index="19">
-        <div class="product-media">
-          <img src="images/acessorios/roupas-produtos/3892-macacao-flor-pille.jpeg" alt="Macacao Flor Pille - Raquiel Fitness e Acessórios" loading="lazy">
-        </div>
-        <div class="product-info">
-          <span class="product-code">Ref. 3892</span>
-          <h3>Macacao Flor Pille</h3>
-          <a class="btn btn-outline-sm" href="https://wa.me/5521964927008?text=Ol%C3%A1%21%20Tenho%20interesse%20na%20pe%C3%A7a%20%22Macacao%20Flor%20Pille%22%20da%20Raquiel%20Fitness%20e%20Acess%C3%B3rios.%20Poderia%20me%20passar%20mais%20informa%C3%A7%C3%B5es%3F" target="_blank" rel="noopener">Tenho interesse</a>
-        </div>
-      </article>
-      <article class="product-card hidden-card" data-index="20">
-        <div class="product-media">
-          <img src="images/acessorios/roupas-produtos/3899-top-maya-mescla-rosset.jpeg" alt="Top Maya Mescla Rosset - Raquiel Fitness e Acessórios" loading="lazy">
-        </div>
-        <div class="product-info">
-          <span class="product-code">Ref. 3899</span>
-          <h3>Top Maya Mescla Rosset</h3>
-          <a class="btn btn-outline-sm" href="https://wa.me/5521964927008?text=Ol%C3%A1%21%20Tenho%20interesse%20na%20pe%C3%A7a%20%22Top%20Maya%20Mescla%20Rosset%22%20da%20Raquiel%20Fitness%20e%20Acess%C3%B3rios.%20Poderia%20me%20passar%20mais%20informa%C3%A7%C3%B5es%3F" target="_blank" rel="noopener">Tenho interesse</a>
-        </div>
-      </article>
-      <article class="product-card hidden-card" data-index="21">
-        <div class="product-media">
-          <img src="images/acessorios/roupas-produtos/3900-calca-flare-zero-leblon.jpeg" alt="Calca Flare Zero Leblon - Raquiel Fitness e Acessórios" loading="lazy">
-        </div>
-        <div class="product-info">
-          <span class="product-code">Ref. 3900</span>
-          <h3>Calca Flare Zero Leblon</h3>
-          <a class="btn btn-outline-sm" href="https://wa.me/5521964927008?text=Ol%C3%A1%21%20Tenho%20interesse%20na%20pe%C3%A7a%20%22Calca%20Flare%20Zero%20Leblon%22%20da%20Raquiel%20Fitness%20e%20Acess%C3%B3rios.%20Poderia%20me%20passar%20mais%20informa%C3%A7%C3%B5es%3F" target="_blank" rel="noopener">Tenho interesse</a>
-        </div>
-      </article>
-      <article class="product-card hidden-card" data-index="22">
-        <div class="product-media">
-          <img src="images/acessorios/roupas-produtos/3904-macacao-isis-zero-leblon.jpeg" alt="Macacao Isis Zero Leblon - Raquiel Fitness e Acessórios" loading="lazy">
-        </div>
-        <div class="product-info">
-          <span class="product-code">Ref. 3904</span>
-          <h3>Macacao Isis Zero Leblon</h3>
-          <a class="btn btn-outline-sm" href="https://wa.me/5521964927008?text=Ol%C3%A1%21%20Tenho%20interesse%20na%20pe%C3%A7a%20%22Macacao%20Isis%20Zero%20Leblon%22%20da%20Raquiel%20Fitness%20e%20Acess%C3%B3rios.%20Poderia%20me%20passar%20mais%20informa%C3%A7%C3%B5es%3F" target="_blank" rel="noopener">Tenho interesse</a>
-        </div>
-      </article>
-      <article class="product-card hidden-card" data-index="23">
-        <div class="product-media">
-          <img src="images/acessorios/roupas-produtos/3905-cigarrete-w007-zero-leblon.jpeg" alt="Cigarrete W007 Zero Leblon - Raquiel Fitness e Acessórios" loading="lazy">
-        </div>
-        <div class="product-info">
-          <span class="product-code">Ref. 3905</span>
-          <h3>Cigarrete W007 Zero Leblon</h3>
-          <a class="btn btn-outline-sm" href="https://wa.me/5521964927008?text=Ol%C3%A1%21%20Tenho%20interesse%20na%20pe%C3%A7a%20%22Cigarrete%20W007%20Zero%20Leblon%22%20da%20Raquiel%20Fitness%20e%20Acess%C3%B3rios.%20Poderia%20me%20passar%20mais%20informa%C3%A7%C3%B5es%3F" target="_blank" rel="noopener">Tenho interesse</a>
-        </div>
-      </article>
-      <article class="product-card hidden-card" data-index="24">
-        <div class="product-media">
-          <img src="images/acessorios/roupas-produtos/3906-cigarrete-beth-zero-leblon.jpeg" alt="Cigarrete Beth Zero Leblon - Raquiel Fitness e Acessórios" loading="lazy">
-        </div>
-        <div class="product-info">
-          <span class="product-code">Ref. 3906</span>
-          <h3>Cigarrete Beth Zero Leblon</h3>
-          <a class="btn btn-outline-sm" href="https://wa.me/5521964927008?text=Ol%C3%A1%21%20Tenho%20interesse%20na%20pe%C3%A7a%20%22Cigarrete%20Beth%20Zero%20Leblon%22%20da%20Raquiel%20Fitness%20e%20Acess%C3%B3rios.%20Poderia%20me%20passar%20mais%20informa%C3%A7%C3%B5es%3F" target="_blank" rel="noopener">Tenho interesse</a>
-        </div>
-      </article>
-      <article class="product-card hidden-card" data-index="25">
-        <div class="product-media">
-          <img src="images/acessorios/roupas-produtos/3907-top-pilar-zero-leblon.jpeg" alt="Top Pilar Zero Leblon - Raquiel Fitness e Acessórios" loading="lazy">
-        </div>
-        <div class="product-info">
-          <span class="product-code">Ref. 3907</span>
-          <h3>Top Pilar Zero Leblon</h3>
-          <a class="btn btn-outline-sm" href="https://wa.me/5521964927008?text=Ol%C3%A1%21%20Tenho%20interesse%20na%20pe%C3%A7a%20%22Top%20Pilar%20Zero%20Leblon%22%20da%20Raquiel%20Fitness%20e%20Acess%C3%B3rios.%20Poderia%20me%20passar%20mais%20informa%C3%A7%C3%B5es%3F" target="_blank" rel="noopener">Tenho interesse</a>
-        </div>
-      </article>
+      <div class="loading-row" id="productsLoading">Carregando peças…</div>
     </div>
 
     <div class="show-more-wrap">
@@ -765,126 +521,7 @@ h1,h2,h3,h4{ font-family:var(--font-display); font-weight:600; line-height:1.15;
     </div>
 
     <div class="look-grid" id="lookGrid">
-      <div class="look-item reveal" data-full="images/acessorios/roupas-vitrine/look-01.jpeg">
-        <img src="images/acessorios/roupas-vitrine/look-01.jpeg" alt="Look fitness Raquiel Fitness e Acessórios 1" loading="lazy">
-        <span class="zoom-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></span>
-      </div>
-      <div class="look-item reveal" data-full="images/acessorios/roupas-vitrine/look-02.jpeg">
-        <img src="images/acessorios/roupas-vitrine/look-02.jpeg" alt="Look fitness Raquiel Fitness e Acessórios 2" loading="lazy">
-        <span class="zoom-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></span>
-      </div>
-      <div class="look-item reveal" data-full="images/acessorios/roupas-vitrine/look-03.jpeg">
-        <img src="images/acessorios/roupas-vitrine/look-03.jpeg" alt="Look fitness Raquiel Fitness e Acessórios 3" loading="lazy">
-        <span class="zoom-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></span>
-      </div>
-      <div class="look-item reveal" data-full="images/acessorios/roupas-vitrine/look-04.jpeg">
-        <img src="images/acessorios/roupas-vitrine/look-04.jpeg" alt="Look fitness Raquiel Fitness e Acessórios 4" loading="lazy">
-        <span class="zoom-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></span>
-      </div>
-      <div class="look-item reveal" data-full="images/acessorios/roupas-vitrine/look-05.jpeg">
-        <img src="images/acessorios/roupas-vitrine/look-05.jpeg" alt="Look fitness Raquiel Fitness e Acessórios 5" loading="lazy">
-        <span class="zoom-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></span>
-      </div>
-      <div class="look-item reveal" data-full="images/acessorios/roupas-vitrine/look-06.jpeg">
-        <img src="images/acessorios/roupas-vitrine/look-06.jpeg" alt="Look fitness Raquiel Fitness e Acessórios 6" loading="lazy">
-        <span class="zoom-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></span>
-      </div>
-      <div class="look-item reveal" data-full="images/acessorios/roupas-vitrine/look-07.jpeg">
-        <img src="images/acessorios/roupas-vitrine/look-07.jpeg" alt="Look fitness Raquiel Fitness e Acessórios 7" loading="lazy">
-        <span class="zoom-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></span>
-      </div>
-      <div class="look-item reveal" data-full="images/acessorios/roupas-vitrine/look-08.jpeg">
-        <img src="images/acessorios/roupas-vitrine/look-08.jpeg" alt="Look fitness Raquiel Fitness e Acessórios 8" loading="lazy">
-        <span class="zoom-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></span>
-      </div>
-      <div class="look-item reveal" data-full="images/acessorios/roupas-vitrine/look-09.jpeg">
-        <img src="images/acessorios/roupas-vitrine/look-09.jpeg" alt="Look fitness Raquiel Fitness e Acessórios 9" loading="lazy">
-        <span class="zoom-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></span>
-      </div>
-      <div class="look-item reveal" data-full="images/acessorios/roupas-vitrine/look-10.jpeg">
-        <img src="images/acessorios/roupas-vitrine/look-10.jpeg" alt="Look fitness Raquiel Fitness e Acessórios 10" loading="lazy">
-        <span class="zoom-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></span>
-      </div>
-      <div class="look-item reveal" data-full="images/acessorios/roupas-vitrine/look-11.jpeg">
-        <img src="images/acessorios/roupas-vitrine/look-11.jpeg" alt="Look fitness Raquiel Fitness e Acessórios 11" loading="lazy">
-        <span class="zoom-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></span>
-      </div>
-      <div class="look-item reveal" data-full="images/acessorios/roupas-vitrine/look-12.jpeg">
-        <img src="images/acessorios/roupas-vitrine/look-12.jpeg" alt="Look fitness Raquiel Fitness e Acessórios 12" loading="lazy">
-        <span class="zoom-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></span>
-      </div>
-      <div class="look-item reveal" data-full="images/acessorios/roupas-vitrine/look-13.jpeg">
-        <img src="images/acessorios/roupas-vitrine/look-13.jpeg" alt="Look fitness Raquiel Fitness e Acessórios 13" loading="lazy">
-        <span class="zoom-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></span>
-      </div>
-      <div class="look-item reveal" data-full="images/acessorios/roupas-vitrine/look-14.jpeg">
-        <img src="images/acessorios/roupas-vitrine/look-14.jpeg" alt="Look fitness Raquiel Fitness e Acessórios 14" loading="lazy">
-        <span class="zoom-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></span>
-      </div>
-      <div class="look-item reveal" data-full="images/acessorios/roupas-vitrine/look-15.jpeg">
-        <img src="images/acessorios/roupas-vitrine/look-15.jpeg" alt="Look fitness Raquiel Fitness e Acessórios 15" loading="lazy">
-        <span class="zoom-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></span>
-      </div>
-      <div class="look-item reveal" data-full="images/acessorios/roupas-vitrine/look-16.jpeg">
-        <img src="images/acessorios/roupas-vitrine/look-16.jpeg" alt="Look fitness Raquiel Fitness e Acessórios 16" loading="lazy">
-        <span class="zoom-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></span>
-      </div>
-      <div class="look-item reveal" data-full="images/acessorios/roupas-vitrine/look-17.jpeg">
-        <img src="images/acessorios/roupas-vitrine/look-17.jpeg" alt="Look fitness Raquiel Fitness e Acessórios 17" loading="lazy">
-        <span class="zoom-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></span>
-      </div>
-      <div class="look-item reveal" data-full="images/acessorios/roupas-vitrine/look-18.jpeg">
-        <img src="images/acessorios/roupas-vitrine/look-18.jpeg" alt="Look fitness Raquiel Fitness e Acessórios 18" loading="lazy">
-        <span class="zoom-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></span>
-      </div>
-      <div class="look-item reveal" data-full="images/acessorios/roupas-vitrine/look-19.jpeg">
-        <img src="images/acessorios/roupas-vitrine/look-19.jpeg" alt="Look fitness Raquiel Fitness e Acessórios 19" loading="lazy">
-        <span class="zoom-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></span>
-      </div>
-      <div class="look-item reveal" data-full="images/acessorios/roupas-vitrine/look-20.jpeg">
-        <img src="images/acessorios/roupas-vitrine/look-20.jpeg" alt="Look fitness Raquiel Fitness e Acessórios 20" loading="lazy">
-        <span class="zoom-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></span>
-      </div>
-      <div class="look-item reveal" data-full="images/acessorios/roupas-vitrine/look-21.jpeg">
-        <img src="images/acessorios/roupas-vitrine/look-21.jpeg" alt="Look fitness Raquiel Fitness e Acessórios 21" loading="lazy">
-        <span class="zoom-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></span>
-      </div>
-      <div class="look-item reveal" data-full="images/acessorios/roupas-vitrine/look-22.jpeg">
-        <img src="images/acessorios/roupas-vitrine/look-22.jpeg" alt="Look fitness Raquiel Fitness e Acessórios 22" loading="lazy">
-        <span class="zoom-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></span>
-      </div>
-      <div class="look-item reveal" data-full="images/acessorios/roupas-vitrine/look-23.jpeg">
-        <img src="images/acessorios/roupas-vitrine/look-23.jpeg" alt="Look fitness Raquiel Fitness e Acessórios 23" loading="lazy">
-        <span class="zoom-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></span>
-      </div>
-      <div class="look-item reveal" data-full="images/acessorios/roupas-vitrine/look-24.jpeg">
-        <img src="images/acessorios/roupas-vitrine/look-24.jpeg" alt="Look fitness Raquiel Fitness e Acessórios 24" loading="lazy">
-        <span class="zoom-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></span>
-      </div>
-      <div class="look-item reveal" data-full="images/acessorios/roupas-vitrine/look-25.jpeg">
-        <img src="images/acessorios/roupas-vitrine/look-25.jpeg" alt="Look fitness Raquiel Fitness e Acessórios 25" loading="lazy">
-        <span class="zoom-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></span>
-      </div>
-      <div class="look-item reveal" data-full="images/acessorios/roupas-vitrine/look-26.jpeg">
-        <img src="images/acessorios/roupas-vitrine/look-26.jpeg" alt="Look fitness Raquiel Fitness e Acessórios 26" loading="lazy">
-        <span class="zoom-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></span>
-      </div>
-      <div class="look-item reveal" data-full="images/acessorios/roupas-vitrine/look-27.jpeg">
-        <img src="images/acessorios/roupas-vitrine/look-27.jpeg" alt="Look fitness Raquiel Fitness e Acessórios 27" loading="lazy">
-        <span class="zoom-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></span>
-      </div>
-      <div class="look-item reveal" data-full="images/acessorios/roupas-vitrine/look-28.jpeg">
-        <img src="images/acessorios/roupas-vitrine/look-28.jpeg" alt="Look fitness Raquiel Fitness e Acessórios 28" loading="lazy">
-        <span class="zoom-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></span>
-      </div>
-      <div class="look-item reveal" data-full="images/acessorios/roupas-vitrine/look-29.jpeg">
-        <img src="images/acessorios/roupas-vitrine/look-29.jpeg" alt="Look fitness Raquiel Fitness e Acessórios 29" loading="lazy">
-        <span class="zoom-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></span>
-      </div>
-      <div class="look-item reveal" data-full="images/acessorios/roupas-vitrine/look-30.jpeg">
-        <img src="images/acessorios/roupas-vitrine/look-30.jpeg" alt="Look fitness Raquiel Fitness e Acessórios 30" loading="lazy">
-        <span class="zoom-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></span>
-      </div>
+      <div class="loading-row" id="lookLoading">Carregando fotos…</div>
     </div>
   </div>
 </section>
@@ -920,176 +557,7 @@ h1,h2,h3,h4{ font-family:var(--font-display); font-weight:600; line-height:1.15;
     </div>
 
     <div class="joias-grid" id="joiasGrid">
-      <article class="joia-card reveal" data-full="images/acessorios/semijoias/joia-01.jpeg" data-index="0">
-        <div class="joia-media">
-          <img src="images/acessorios/semijoias/joia-01.jpeg" alt="Conjunto de Brincos - semijoia Raquiel Fitness e Acessórios" loading="lazy">
-          <span class="zoom-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></span>
-        </div>
-        <div class="joia-info">
-          <h3>Conjunto de Brincos</h3>
-          <a class="btn btn-outline-sm" href="https://wa.me/5521996948669?text=Ol%C3%A1%21%20Tenho%20interesse%20em%20uma%20semijoia%20%28Conjunto%20de%20Brincos%29%20da%20Raquiel%20Fitness%20e%20Acess%C3%B3rios.%20Poderia%20me%20passar%20mais%20informa%C3%A7%C3%B5es%3F" target="_blank" rel="noopener">Tenho interesse</a>
-        </div>
-      </article>
-      <article class="joia-card reveal" data-full="images/acessorios/semijoias/joia-02.jpeg" data-index="1">
-        <div class="joia-media">
-          <img src="images/acessorios/semijoias/joia-02.jpeg" alt="Brincos Duplos - semijoia Raquiel Fitness e Acessórios" loading="lazy">
-          <span class="zoom-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></span>
-        </div>
-        <div class="joia-info">
-          <h3>Brincos Duplos</h3>
-          <a class="btn btn-outline-sm" href="https://wa.me/5521996948669?text=Ol%C3%A1%21%20Tenho%20interesse%20em%20uma%20semijoia%20%28Brincos%20Duplos%29%20da%20Raquiel%20Fitness%20e%20Acess%C3%B3rios.%20Poderia%20me%20passar%20mais%20informa%C3%A7%C3%B5es%3F" target="_blank" rel="noopener">Tenho interesse</a>
-        </div>
-      </article>
-      <article class="joia-card reveal" data-full="images/acessorios/semijoias/joia-03.jpeg" data-index="2">
-        <div class="joia-media">
-          <img src="images/acessorios/semijoias/joia-03.jpeg" alt="Brincos Argola - semijoia Raquiel Fitness e Acessórios" loading="lazy">
-          <span class="zoom-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></span>
-        </div>
-        <div class="joia-info">
-          <h3>Brincos Argola</h3>
-          <a class="btn btn-outline-sm" href="https://wa.me/5521996948669?text=Ol%C3%A1%21%20Tenho%20interesse%20em%20uma%20semijoia%20%28Brincos%20Argola%29%20da%20Raquiel%20Fitness%20e%20Acess%C3%B3rios.%20Poderia%20me%20passar%20mais%20informa%C3%A7%C3%B5es%3F" target="_blank" rel="noopener">Tenho interesse</a>
-        </div>
-      </article>
-      <article class="joia-card reveal" data-full="images/acessorios/semijoias/joia-04.jpeg" data-index="3">
-        <div class="joia-media">
-          <img src="images/acessorios/semijoias/joia-04.jpeg" alt="Brincos Argola - semijoia Raquiel Fitness e Acessórios" loading="lazy">
-          <span class="zoom-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></span>
-        </div>
-        <div class="joia-info">
-          <h3>Brincos Argola</h3>
-          <a class="btn btn-outline-sm" href="https://wa.me/5521996948669?text=Ol%C3%A1%21%20Tenho%20interesse%20em%20uma%20semijoia%20%28Brincos%20Argola%29%20da%20Raquiel%20Fitness%20e%20Acess%C3%B3rios.%20Poderia%20me%20passar%20mais%20informa%C3%A7%C3%B5es%3F" target="_blank" rel="noopener">Tenho interesse</a>
-        </div>
-      </article>
-      <article class="joia-card reveal" data-full="images/acessorios/semijoias/joia-05.jpeg" data-index="4">
-        <div class="joia-media">
-          <img src="images/acessorios/semijoias/joia-05.jpeg" alt="Anel Infinito - semijoia Raquiel Fitness e Acessórios" loading="lazy">
-          <span class="zoom-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></span>
-        </div>
-        <div class="joia-info">
-          <h3>Anel Infinito</h3>
-          <a class="btn btn-outline-sm" href="https://wa.me/5521996948669?text=Ol%C3%A1%21%20Tenho%20interesse%20em%20uma%20semijoia%20%28Anel%20Infinito%29%20da%20Raquiel%20Fitness%20e%20Acess%C3%B3rios.%20Poderia%20me%20passar%20mais%20informa%C3%A7%C3%B5es%3F" target="_blank" rel="noopener">Tenho interesse</a>
-        </div>
-      </article>
-      <article class="joia-card reveal" data-full="images/acessorios/semijoias/joia-06.jpeg" data-index="5">
-        <div class="joia-media">
-          <img src="images/acessorios/semijoias/joia-06.jpeg" alt="Colar Infinito - semijoia Raquiel Fitness e Acessórios" loading="lazy">
-          <span class="zoom-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></span>
-        </div>
-        <div class="joia-info">
-          <h3>Colar Infinito</h3>
-          <a class="btn btn-outline-sm" href="https://wa.me/5521996948669?text=Ol%C3%A1%21%20Tenho%20interesse%20em%20uma%20semijoia%20%28Colar%20Infinito%29%20da%20Raquiel%20Fitness%20e%20Acess%C3%B3rios.%20Poderia%20me%20passar%20mais%20informa%C3%A7%C3%B5es%3F" target="_blank" rel="noopener">Tenho interesse</a>
-        </div>
-      </article>
-      <article class="joia-card reveal" data-full="images/acessorios/semijoias/joia-07.jpeg" data-index="6">
-        <div class="joia-media">
-          <img src="images/acessorios/semijoias/joia-07.jpeg" alt="Pingente Borboleta - semijoia Raquiel Fitness e Acessórios" loading="lazy">
-          <span class="zoom-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></span>
-        </div>
-        <div class="joia-info">
-          <h3>Pingente Borboleta</h3>
-          <a class="btn btn-outline-sm" href="https://wa.me/5521996948669?text=Ol%C3%A1%21%20Tenho%20interesse%20em%20uma%20semijoia%20%28Pingente%20Borboleta%29%20da%20Raquiel%20Fitness%20e%20Acess%C3%B3rios.%20Poderia%20me%20passar%20mais%20informa%C3%A7%C3%B5es%3F" target="_blank" rel="noopener">Tenho interesse</a>
-        </div>
-      </article>
-      <article class="joia-card reveal" data-full="images/acessorios/semijoias/joia-08.jpeg" data-index="7">
-        <div class="joia-media">
-          <img src="images/acessorios/semijoias/joia-08.jpeg" alt="Brincos Borboleta - semijoia Raquiel Fitness e Acessórios" loading="lazy">
-          <span class="zoom-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></span>
-        </div>
-        <div class="joia-info">
-          <h3>Brincos Borboleta</h3>
-          <a class="btn btn-outline-sm" href="https://wa.me/5521996948669?text=Ol%C3%A1%21%20Tenho%20interesse%20em%20uma%20semijoia%20%28Brincos%20Borboleta%29%20da%20Raquiel%20Fitness%20e%20Acess%C3%B3rios.%20Poderia%20me%20passar%20mais%20informa%C3%A7%C3%B5es%3F" target="_blank" rel="noopener">Tenho interesse</a>
-        </div>
-      </article>
-      <article class="joia-card reveal" data-full="images/acessorios/semijoias/joia-09.jpeg" data-index="8">
-        <div class="joia-media">
-          <img src="images/acessorios/semijoias/joia-09.jpeg" alt="Brincos Solitário - semijoia Raquiel Fitness e Acessórios" loading="lazy">
-          <span class="zoom-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></span>
-        </div>
-        <div class="joia-info">
-          <h3>Brincos Solitário</h3>
-          <a class="btn btn-outline-sm" href="https://wa.me/5521996948669?text=Ol%C3%A1%21%20Tenho%20interesse%20em%20uma%20semijoia%20%28Brincos%20Solit%C3%A1rio%29%20da%20Raquiel%20Fitness%20e%20Acess%C3%B3rios.%20Poderia%20me%20passar%20mais%20informa%C3%A7%C3%B5es%3F" target="_blank" rel="noopener">Tenho interesse</a>
-        </div>
-      </article>
-      <article class="joia-card reveal" data-full="images/acessorios/semijoias/joia-10.jpeg" data-index="9">
-        <div class="joia-media">
-          <img src="images/acessorios/semijoias/joia-10.jpeg" alt="Colar Solitário - semijoia Raquiel Fitness e Acessórios" loading="lazy">
-          <span class="zoom-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></span>
-        </div>
-        <div class="joia-info">
-          <h3>Colar Solitário</h3>
-          <a class="btn btn-outline-sm" href="https://wa.me/5521996948669?text=Ol%C3%A1%21%20Tenho%20interesse%20em%20uma%20semijoia%20%28Colar%20Solit%C3%A1rio%29%20da%20Raquiel%20Fitness%20e%20Acess%C3%B3rios.%20Poderia%20me%20passar%20mais%20informa%C3%A7%C3%B5es%3F" target="_blank" rel="noopener">Tenho interesse</a>
-        </div>
-      </article>
-      <article class="joia-card reveal" data-full="images/acessorios/semijoias/joia-11.jpeg" data-index="10">
-        <div class="joia-media">
-          <img src="images/acessorios/semijoias/joia-11.jpeg" alt="Corrente Fina - semijoia Raquiel Fitness e Acessórios" loading="lazy">
-          <span class="zoom-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></span>
-        </div>
-        <div class="joia-info">
-          <h3>Corrente Fina</h3>
-          <a class="btn btn-outline-sm" href="https://wa.me/5521996948669?text=Ol%C3%A1%21%20Tenho%20interesse%20em%20uma%20semijoia%20%28Corrente%20Fina%29%20da%20Raquiel%20Fitness%20e%20Acess%C3%B3rios.%20Poderia%20me%20passar%20mais%20informa%C3%A7%C3%B5es%3F" target="_blank" rel="noopener">Tenho interesse</a>
-        </div>
-      </article>
-      <article class="joia-card reveal" data-full="images/acessorios/semijoias/joia-12.jpeg" data-index="11">
-        <div class="joia-media">
-          <img src="images/acessorios/semijoias/joia-12.jpeg" alt="Colar Duplo - semijoia Raquiel Fitness e Acessórios" loading="lazy">
-          <span class="zoom-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></span>
-        </div>
-        <div class="joia-info">
-          <h3>Colar Duplo</h3>
-          <a class="btn btn-outline-sm" href="https://wa.me/5521996948669?text=Ol%C3%A1%21%20Tenho%20interesse%20em%20uma%20semijoia%20%28Colar%20Duplo%29%20da%20Raquiel%20Fitness%20e%20Acess%C3%B3rios.%20Poderia%20me%20passar%20mais%20informa%C3%A7%C3%B5es%3F" target="_blank" rel="noopener">Tenho interesse</a>
-        </div>
-      </article>
-      <article class="joia-card reveal" data-full="images/acessorios/semijoias/joia-13.jpeg" data-index="12">
-        <div class="joia-media">
-          <img src="images/acessorios/semijoias/joia-13.jpeg" alt="Anel Solitário - semijoia Raquiel Fitness e Acessórios" loading="lazy">
-          <span class="zoom-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></span>
-        </div>
-        <div class="joia-info">
-          <h3>Anel Solitário</h3>
-          <a class="btn btn-outline-sm" href="https://wa.me/5521996948669?text=Ol%C3%A1%21%20Tenho%20interesse%20em%20uma%20semijoia%20%28Anel%20Solit%C3%A1rio%29%20da%20Raquiel%20Fitness%20e%20Acess%C3%B3rios.%20Poderia%20me%20passar%20mais%20informa%C3%A7%C3%B5es%3F" target="_blank" rel="noopener">Tenho interesse</a>
-        </div>
-      </article>
-      <article class="joia-card reveal" data-full="images/acessorios/semijoias/joia-14.jpeg" data-index="13">
-        <div class="joia-media">
-          <img src="images/acessorios/semijoias/joia-14.jpeg" alt="Pulseira Coração - semijoia Raquiel Fitness e Acessórios" loading="lazy">
-          <span class="zoom-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></span>
-        </div>
-        <div class="joia-info">
-          <h3>Pulseira Coração</h3>
-          <a class="btn btn-outline-sm" href="https://wa.me/5521996948669?text=Ol%C3%A1%21%20Tenho%20interesse%20em%20uma%20semijoia%20%28Pulseira%20Cora%C3%A7%C3%A3o%29%20da%20Raquiel%20Fitness%20e%20Acess%C3%B3rios.%20Poderia%20me%20passar%20mais%20informa%C3%A7%C3%B5es%3F" target="_blank" rel="noopener">Tenho interesse</a>
-        </div>
-      </article>
-      <article class="joia-card reveal" data-full="images/acessorios/semijoias/joia-15.jpeg" data-index="14">
-        <div class="joia-media">
-          <img src="images/acessorios/semijoias/joia-15.jpeg" alt="Anel Coração - semijoia Raquiel Fitness e Acessórios" loading="lazy">
-          <span class="zoom-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></span>
-        </div>
-        <div class="joia-info">
-          <h3>Anel Coração</h3>
-          <a class="btn btn-outline-sm" href="https://wa.me/5521996948669?text=Ol%C3%A1%21%20Tenho%20interesse%20em%20uma%20semijoia%20%28Anel%20Cora%C3%A7%C3%A3o%29%20da%20Raquiel%20Fitness%20e%20Acess%C3%B3rios.%20Poderia%20me%20passar%20mais%20informa%C3%A7%C3%B5es%3F" target="_blank" rel="noopener">Tenho interesse</a>
-        </div>
-      </article>
-      <article class="joia-card reveal" data-full="images/acessorios/semijoias/joia-16.jpeg" data-index="15">
-        <div class="joia-media">
-          <img src="images/acessorios/semijoias/joia-16.jpeg" alt="Brincos Coração - semijoia Raquiel Fitness e Acessórios" loading="lazy">
-          <span class="zoom-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></span>
-        </div>
-        <div class="joia-info">
-          <h3>Brincos Coração</h3>
-          <a class="btn btn-outline-sm" href="https://wa.me/5521996948669?text=Ol%C3%A1%21%20Tenho%20interesse%20em%20uma%20semijoia%20%28Brincos%20Cora%C3%A7%C3%A3o%29%20da%20Raquiel%20Fitness%20e%20Acess%C3%B3rios.%20Poderia%20me%20passar%20mais%20informa%C3%A7%C3%B5es%3F" target="_blank" rel="noopener">Tenho interesse</a>
-        </div>
-      </article>
-      <article class="joia-card reveal" data-full="images/acessorios/semijoias/joia-17.jpeg" data-index="16">
-        <div class="joia-media">
-          <img src="images/acessorios/semijoias/joia-17.jpeg" alt="Brincos Infinito - semijoia Raquiel Fitness e Acessórios" loading="lazy">
-          <span class="zoom-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></span>
-        </div>
-        <div class="joia-info">
-          <h3>Brincos Infinito</h3>
-          <a class="btn btn-outline-sm" href="https://wa.me/5521996948669?text=Ol%C3%A1%21%20Tenho%20interesse%20em%20uma%20semijoia%20%28Brincos%20Infinito%29%20da%20Raquiel%20Fitness%20e%20Acess%C3%B3rios.%20Poderia%20me%20passar%20mais%20informa%C3%A7%C3%B5es%3F" target="_blank" rel="noopener">Tenho interesse</a>
-        </div>
-      </article>
+      <div class="loading-row" id="joiasLoading">Carregando semijoias…</div>
     </div>
   </div>
 </section>
@@ -1313,8 +781,6 @@ h1,h2,h3,h4{ font-family:var(--font-display); font-weight:600; line-height:1.15;
       item.addEventListener('click', function(){ openLightbox(items, idx); });
     });
   }
-  bindGroup('.look-item');
-  bindGroup('.joia-media');
 
   lbClose.addEventListener('click', closeLightbox);
   lbNext.addEventListener('click', showNext);
@@ -1326,6 +792,152 @@ h1,h2,h3,h4{ font-family:var(--font-display); font-weight:600; line-height:1.15;
     if(e.key === 'ArrowRight') showNext();
     if(e.key === 'ArrowLeft') showPrev();
   });
+
+  /* ============================================================
+     PRODUTOS DINÂMICOS (Roupas Fitness, Lookbook e Semijoias)
+     Carrega do Supabase e renderiza com o mesmo HTML/CSS de
+     sempre, para que a alteração feita no /admin apareça aqui.
+  ============================================================ */
+  function escapeHtml(str){
+    var d = document.createElement('div');
+    d.textContent = str || '';
+    return d.innerHTML;
+  }
+
+  function waLink(numero, mensagem){
+    return 'https://wa.me/' + numero + '?text=' + encodeURIComponent(mensagem);
+  }
+
+  function buildProductCard(p, idx){
+    var article = document.createElement('article');
+    article.className = 'product-card' + (idx >= 8 ? ' hidden-card' : ' reveal');
+    article.dataset.index = idx;
+    var refHtml = p.referencia
+      ? '<span class="product-code">Ref. ' + escapeHtml(p.referencia) + '</span>' : '';
+    var link = waLink('5521964927008', 'Olá! Tenho interesse na peça "' + p.nome + '" da Raquiel Fitness e Acessórios. Poderia me passar mais informações?');
+    article.innerHTML =
+      '<div class="product-media"><img src="' + p.imagem_url + '" alt="' + escapeHtml(p.nome) + ' - Raquiel Fitness e Acessórios" loading="lazy"></div>' +
+      '<div class="product-info">' + refHtml +
+        '<h3>' + escapeHtml(p.nome) + '</h3>' +
+        '<a class="btn btn-outline-sm" href="' + link + '" target="_blank" rel="noopener">Tenho interesse</a>' +
+      '</div>';
+    return article;
+  }
+
+  function buildJoiaCard(p, idx){
+    var article = document.createElement('article');
+    article.className = 'joia-card reveal';
+    article.dataset.full = p.imagem_url;
+    article.dataset.index = idx;
+    var link = waLink('5521996948669', 'Olá! Tenho interesse em uma semijoia (' + p.nome + ') da Raquiel Fitness e Acessórios. Poderia me passar mais informações?');
+    article.innerHTML =
+      '<div class="joia-media">' +
+        '<img src="' + p.imagem_url + '" alt="' + escapeHtml(p.nome) + ' - semijoia Raquiel Fitness e Acessórios" loading="lazy">' +
+        '<span class="zoom-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></span>' +
+      '</div>' +
+      '<div class="joia-info"><h3>' + escapeHtml(p.nome) + '</h3>' +
+        '<a class="btn btn-outline-sm" href="' + link + '" target="_blank" rel="noopener">Tenho interesse</a>' +
+      '</div>';
+    return article;
+  }
+
+  function buildLookCard(p, idx){
+    var div = document.createElement('div');
+    div.className = 'look-item reveal';
+    div.dataset.full = p.imagem_url;
+    div.dataset.index = idx;
+    div.innerHTML =
+      '<img src="' + p.imagem_url + '" alt="' + escapeHtml(p.nome) + '" loading="lazy">' +
+      '<span class="zoom-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></span>';
+    return div;
+  }
+
+  function observeReveal(el){
+    if('IntersectionObserver' in window){ io.observe(el); }
+    else { el.classList.add('in'); }
+  }
+
+  async function loadPublicProducts(){
+    var gridRoupas = document.getElementById('productsGrid');
+    var gridLook = document.getElementById('lookGrid');
+    var gridJoias = document.getElementById('joiasGrid');
+
+    if(!window.SUPABASE_URL || window.SUPABASE_URL.indexOf('COLE_AQUI') === 0 || !window.supabase){
+      gridRoupas.innerHTML = '<div class="loading-row">Vitrine em atualização. Fale conosco pelo WhatsApp para ver as peças disponíveis.</div>';
+      gridLook.innerHTML = '<div class="loading-row">Galeria em atualização.</div>';
+      gridJoias.innerHTML = '<div class="loading-row">Vitrine em atualização. Fale conosco pelo WhatsApp para ver as peças disponíveis.</div>';
+      return;
+    }
+
+    var sbPublic = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+
+    try{
+      var { data: roupas, error: errRoupas } = await sbPublic
+        .from('produtos').select('*').eq('categoria', 'roupas').order('ordem', { ascending:true });
+      if(errRoupas) throw errRoupas;
+
+      gridRoupas.innerHTML = '';
+      if(!roupas || roupas.length === 0){
+        gridRoupas.innerHTML = '<div class="loading-row">Novas peças em breve.</div>';
+      } else {
+        roupas.forEach(function(p, idx){
+          var card = buildProductCard(p, idx);
+          gridRoupas.appendChild(card);
+          if(idx < 8){ observeReveal(card); }
+        });
+        var showMoreWrap = document.querySelector('.show-more-wrap');
+        if(showMoreWrap){ showMoreWrap.style.display = roupas.length > 8 ? 'flex' : 'none'; }
+      }
+    } catch(err){
+      console.error(err);
+      gridRoupas.innerHTML = '<div class="loading-row">Não foi possível carregar as peças agora. Tente novamente em instantes.</div>';
+    }
+
+    try{
+      var { data: looks, error: errLooks } = await sbPublic
+        .from('produtos').select('*').eq('categoria', 'lookbook').order('ordem', { ascending:true });
+      if(errLooks) throw errLooks;
+
+      gridLook.innerHTML = '';
+      if(!looks || looks.length === 0){
+        gridLook.innerHTML = '<div class="loading-row">Novos looks em breve.</div>';
+      } else {
+        looks.forEach(function(p, idx){
+          var card = buildLookCard(p, idx);
+          gridLook.appendChild(card);
+          observeReveal(card);
+        });
+        bindGroup('.look-item');
+      }
+    } catch(err){
+      console.error(err);
+      gridLook.innerHTML = '<div class="loading-row">Não foi possível carregar o lookbook agora. Tente novamente em instantes.</div>';
+    }
+
+    try{
+      var { data: joias, error: errJoias } = await sbPublic
+        .from('produtos').select('*').eq('categoria', 'semijoias').order('ordem', { ascending:true });
+      if(errJoias) throw errJoias;
+
+      gridJoias.innerHTML = '';
+      if(!joias || joias.length === 0){
+        gridJoias.innerHTML = '<div class="loading-row">Novas peças em breve.</div>';
+      } else {
+        joias.forEach(function(p, idx){
+          var card = buildJoiaCard(p, idx);
+          gridJoias.appendChild(card);
+          observeReveal(card);
+        });
+        bindGroup('.joia-media');
+      }
+    } catch(err){
+      console.error(err);
+      gridJoias.innerHTML = '<div class="loading-row">Não foi possível carregar as semijoias agora. Tente novamente em instantes.</div>';
+    }
+  }
+
+  loadPublicProducts();
+
 
 })();
 </script>
