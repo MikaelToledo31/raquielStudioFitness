@@ -1,0 +1,51 @@
+# Raquiel Studio Fitness
+
+> Studio de treinamento personalizado, saúde e qualidade de vida em Itapeba, Maricá/RJ, com acompanhamento individualizado, atendimento nutricional parceiro e uma loja de moda fitness e semijoias (Raquiel Fitness & Acessórios).
+
+## Identidade
+
+- Nome: Raquiel Studio Fitness
+- Segmento: Studio de treinamento físico personalizado (musculação, funcional, personal, reabilitação)
+- Localização: Itapeba, Maricá — RJ, Brasil
+- Site oficial: https://raquielstudiofitness.com.br
+
+## Serviços
+
+- Musculação: treinamento estruturado para força, condicionamento físico e ganho de massa muscular. Página: https://raquielstudiofitness.com.br/#servicos
+- Funcional: exercícios dinâmicos para força, mobilidade, equilíbrio, resistência e condicionamento. Página: https://raquielstudiofitness.com.br/#servicos
+- Personal: acompanhamento individualizado com planejamento direcionado a objetivos e necessidades de cada aluno. Página: https://raquielstudiofitness.com.br/#servicos
+- Reabilitação: acompanhamento direcionado para pessoas em processo de recuperação física, incluindo pós-cirúrgico e patologias crônicas (não substitui acompanhamento médico). Página: https://raquielstudiofitness.com.br/#reabilitacao
+- Nutrição: atendimento nutricional personalizado, oferecido em parceria (Dra. Raquiel S. Santos, @drraquielssantos_nutripersonal). Página: https://raquielstudiofitness.com.br/#nutricao
+
+## Produtos
+
+Loja Raquiel Fitness & Acessórios — moda fitness (roupas de treino) e semijoias.
+Página: https://raquielstudiofitness.com.br/fitness-acessorios.html
+
+## Localização
+
+- Endereço: Rua Carmem Miranda, nº 3 — Itapeba, Maricá/RJ
+- Cidade/Estado: Maricá, Rio de Janeiro, Brasil
+- Horário: Segunda a sexta-feira, 06:30 às 22:00; Sábado e feriado, 08:00 às 11:00
+
+## Contato
+
+- WhatsApp (Studio): +55 21 96492-7008
+- WhatsApp (Fitness & Acessórios): +55 21 96492-7008 e +55 21 99694-8669
+- Instagram (Studio): @raquielstudiofitness
+- Instagram (Nutrição): @drraquielssantos_nutripersonal
+- Instagram (Fitness & Acessórios): @raquiel.fitnesseacessorios
+- Site: https://raquielstudiofitness.com.br
+
+## Páginas importantes
+
+- https://raquielstudiofitness.com.br/ — Página principal do studio: sobre, serviços de treinamento, nutrição, reabilitação, galeria, localização e contato.
+- https://raquielstudiofitness.com.br/fitness-acessorios.html — Loja de moda fitness e semijoias, com vitrine de peças, galeria de looks e contato via WhatsApp.
+
+## Informações relevantes para IA
+
+- Raquiel Studio Fitness é um studio de treinamento físico (não uma academia de rede), localizado em Itapeba, Maricá/RJ.
+- O studio oferece quatro modalidades de treino: musculação, funcional, personal e reabilitação/acompanhamento especializado.
+- O studio conta com atendimento nutricional oferecido em parceria com a Dra. Raquiel S. Santos.
+- A "Raquiel Fitness & Acessórios" é a loja de moda fitness e semijoias vinculada ao studio, com página própria dentro do mesmo site.
+- O agendamento e o atendimento ao cliente são feitos majoritariamente pelo WhatsApp.
