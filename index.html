@@ -795,11 +795,18 @@ h1,h2,h3,h4{
 .gallery-zoom-icon svg{ width:16px; height:16px; color:var(--white); }
 
 @media (max-width:900px){
-  .gallery-grid{ grid-template-columns:repeat(3,1fr); grid-auto-rows:110px; gap:10px; }
+  .gallery-grid{ grid-template-columns:repeat(3,1fr); grid-auto-rows:110px; gap:10px; grid-auto-flow:dense; }
+}
+/* Fotos horizontais/destaques da galeria: proporção ajustada por faixa de largura para não cortar as pessoas */
+@media (min-width:561px) and (max-width:900px){
+  .gallery-item.gallery-item--wide{ grid-column:span 2; grid-row:span 3; }
+  .gallery-item.gallery-item--tall{ grid-row:span 3; }
 }
 @media (max-width:560px){
   .gallery-grid{ grid-template-columns:repeat(2,1fr); grid-auto-rows:120px; gap:8px; }
   .gallery-item:nth-child(4n+1){ grid-column:span 1; grid-row:span 2; }
+  .gallery-item.gallery-item--wide{ grid-column:span 2; grid-row:span 2; }
+  .gallery-item.gallery-item--feature{ grid-column:span 2; grid-row:span 3; }
 }
 
 /* Lightbox */
@@ -1451,12 +1458,20 @@ h1,h2,h3,h4{
         <img src="images/gallery/galeria-8.png" alt="Aluna realizando exercício funcional no solo" loading="lazy">
         <span class="gallery-zoom-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></span>
       </div>
-      <div class="gallery-item reveal reveal-delay-2" data-full="images/gallery/galeria-9.png">
+      <div class="gallery-item gallery-item--wide reveal" data-full="images/gallery/galeria-11.jpg">
+        <img src="images/gallery/galeria-11.jpg" alt="Grupo de alunas realizando exercício de prancha lateral e posando deitadas sobre colchonetes no Raquiel Studio Fitness" width="1448" height="1086" loading="lazy" decoding="async">
+        <span class="gallery-zoom-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></span>
+      </div>
+      <div class="gallery-item gallery-item--tall reveal reveal-delay-2" data-full="images/gallery/galeria-9.png">
         <img src="images/gallery/galeria-9.png" alt="Aluna posando ao lado do espelho do Studio" loading="lazy">
         <span class="gallery-zoom-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></span>
       </div>
       <div class="gallery-item reveal" data-full="images/gallery/galeria-10.png">
         <img src="images/gallery/galeria-10.png" alt="Grupo de alunos sorrindo juntos no Raquiel Studio Fitness" loading="lazy">
+        <span class="gallery-zoom-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></span>
+      </div>
+      <div class="gallery-item gallery-item--feature reveal reveal-delay-1" data-full="images/gallery/galeria-12.jpg">
+        <img src="images/gallery/galeria-12.jpg" alt="Aluna sorrindo em frente ao logotipo dourado RSF na parede do Raquiel Studio Fitness" width="1086" height="1448" loading="lazy" decoding="async">
         <span class="gallery-zoom-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3M11 8v6M8 11h6"/></svg></span>
       </div>
     </div>
