@@ -10,9 +10,6 @@
 
    Para ENCERRAR a campanha: remova a linha <script> das páginas
    (ou defina CONFIG.enabled = false logo abaixo).
-   Para TESTAR sem esperar o intervalo: abra a página com ?bf=1
-   (ex.: https://raquielstudiofitness.com.br/?bf=1) — ignora o
-   controle de frequência.
 ============================================================ */
 (function () {
   "use strict";
@@ -21,16 +18,8 @@
   var CONFIG = {
     enabled: true,
 
-    // Controle de frequência: depois de visto/fechado, só volta a aparecer
-    // para o mesmo visitante após este número de horas (localStorage).
-    frequencyHours: 24,
-
     // Atraso (ms) antes de abrir, para não competir com o carregamento.
     showDelayMs: 1400,
-
-    // Chave usada no localStorage. Mude o sufixo para "reiniciar" a campanha
-    // para todos os visitantes (ex.: rsf_bf2026).
-    storageKey: "rsf_bf2025",
 
     // Período opcional da campanha (formato ISO). Deixe null para não limitar.
     // Ex.: startDate: "2025-11-24T00:00:00-03:00", endDate: "2025-12-01T23:59:59-03:00"
@@ -77,28 +66,12 @@
   })();
   var THEME = (script && script.getAttribute("data-theme")) === "acessorios" ? "acessorios" : "studio";
   var BASE = script && script.src ? new URL("../images/blackfriday/", script.src).href : "images/blackfriday/";
-  var STORAGE_KEY = CONFIG.storageKey + "_" + THEME;
-
   /* ---------------- utilidades ---------------- */
-  function forced() { return /[?&]bf=1(?:&|$)/.test(window.location.search); }
-
   function inPeriod() {
     var now = Date.now();
     if (CONFIG.startDate && now < new Date(CONFIG.startDate).getTime()) return false;
     if (CONFIG.endDate && now > new Date(CONFIG.endDate).getTime()) return false;
     return true;
-  }
-
-  function recentlySeen() {
-    try {
-      var t = parseInt(window.localStorage.getItem(STORAGE_KEY), 10);
-      if (!t) return false;
-      return (Date.now() - t) < CONFIG.frequencyHours * 3600 * 1000;
-    } catch (e) { return false; }
-  }
-
-  function markSeen() {
-    try { window.localStorage.setItem(STORAGE_KEY, String(Date.now())); } catch (e) {}
   }
 
   function esc(s) {
@@ -107,7 +80,9 @@
     return d.innerHTML;
   }
 
-  if (!forced() && (!inPeriod() || recentlySeen())) return;
+  // Cada carregamento de página inicia uma nova instância do pop-up. Não há
+  // persistência entre visitas, recargas ou navegação entre páginas.
+  if (!inPeriod()) return;
 
   /* ---------------- CSS ---------------- */
   var css = [
@@ -246,7 +221,6 @@
     lastFocus = document.activeElement;
     prevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    markSeen();
     void overlay.offsetWidth; // reflow para a transição de entrada
     overlay.classList.add("bf-open");
     window.setTimeout(function () { closeBtn.focus({ preventScroll: true }); }, 60);
@@ -281,7 +255,7 @@
     if (e.target.closest(".bf-cta")) window.setTimeout(close, 150);
   });
 
-  function start() { window.setTimeout(open, forced() ? 300 : CONFIG.showDelayMs); }
+  function start() { window.setTimeout(open, CONFIG.showDelayMs); }
   if (document.readyState === "complete") start();
   else window.addEventListener("load", start);
 })();
