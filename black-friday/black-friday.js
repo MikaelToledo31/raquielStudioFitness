@@ -255,7 +255,27 @@
     if (e.target.closest(".bf-cta")) window.setTimeout(close, 150);
   });
 
-  function start() { window.setTimeout(open, CONFIG.showDelayMs); }
-  if (document.readyState === "complete") start();
-  else window.addEventListener("load", start);
+  // O modal depende apenas do DOM, não do carregamento completo de imagens,
+  // vídeos ou recursos de terceiros. Assim, uma falha ou atraso em qualquer
+  // desses recursos não impede sua exibição.
+  var hasScheduledOpen = false;
+  function start() {
+    if (hasScheduledOpen) return;
+    hasScheduledOpen = true;
+    window.setTimeout(open, CONFIG.showDelayMs);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", start, { once: true });
+  } else {
+    start();
+  }
+
+  // Ao retornar a uma página restaurada pelo cache de navegação (bfcache),
+  // trate-a como uma nova visualização sem usar qualquer persistência.
+  window.addEventListener("pageshow", function (e) {
+    if (!e.persisted) return;
+    hasScheduledOpen = false;
+    start();
+  });
 })();
